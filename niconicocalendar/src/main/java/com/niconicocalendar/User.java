@@ -2,21 +2,21 @@ package com.niconicocalendar;
 
 public class User {
 
-	private int id;
+	private int userId;
 	private String username;
 
-	public User(int id, String username) {
+	public User(int userId, String username) {
 		super();
-		this.id = id;
+		this.userId = userId;
 		this.username = username;
 	}
 
-	public int getId() {
-		return id;
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public String getUsername() {

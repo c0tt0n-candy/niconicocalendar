@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.niconicocalendar.Feelings;
 import com.niconicocalendar.User;
 
 @Controller
@@ -33,11 +34,15 @@ public class IndexController {
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
 		model.addAttribute("lastDay", lastDay);
 		
+		// ユーザーを取得
 		List<User> user = jdbcTemplate.query("select * from user_tbl",
 				(rs, rowNum) -> new User(rs.getInt("userId"), rs.getString("username")));
-
 		model.addAttribute("user", user);
 		
+		// 履歴を取得
+		List<Feelings> feelings = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
+		model.addAttribute("feelingHistory", feelings);
 		
 		return "niconico";
 	}

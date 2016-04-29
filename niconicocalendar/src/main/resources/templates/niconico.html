@@ -55,12 +55,18 @@
 
 		<tr th:each="user:${user}">
 			<td class="userName" th:text="${user.username}" />
-			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" />
+ 			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
+ 				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId}">
+ 					<th:block th:if="${feelingHistory.day == i}">
+ 						<div th:text="${feelingHistory.feelingId}"></div>
+  					</th:block>
+ 				</th:block>
+			</td>
 		</tr>
 	</table>
 
 	<p>
-		<select name="id">
+		<select>
 			<option></option>
 		</select>
 		<input type="submit" value="削除" />

@@ -8,11 +8,9 @@ public class Feelings {
 	private int day;
 	private int feelingId;
 
-	public Feelings(int userId, int year, int month, int day, int feelingId) {
+	public Feelings(int userId, int day, int feelingId) {
 		super();
 		this.userId = userId;
-		this.year = year;
-		this.month = month;
 		this.day = day;
 		this.feelingId = feelingId;
 	}

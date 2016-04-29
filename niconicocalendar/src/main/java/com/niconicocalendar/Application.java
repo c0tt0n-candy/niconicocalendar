@@ -36,6 +36,9 @@ public class Application implements CommandLineRunner {
 
 		jdbcTemplate.execute("drop table feelings_history_tbl if exists");
 		jdbcTemplate
-				.execute("create table feelings_history_Tbl(userId integer, year integer, month integer, day integer, feelingId integer)");
+				.execute("create table feelings_history_tbl(userId integer, year integer, month integer, day integer, feelingId integer)");
+		jdbcTemplate.update("insert into feelings_history_tbl(userId, year, month, day, feelingId) values(?,?,?,?,?)", 1, 2016, 4, 29, 4);
+		jdbcTemplate.update("insert into feelings_history_tbl(userId, year, month, day, feelingId) values(?,?,?,?,?)", 2, 2016, 4, 29, 2);
+		jdbcTemplate.update("insert into feelings_history_tbl(userId, year, month, day, feelingId) values(?,?,?,?,?)", 3, 2016, 4, 29, 0);
 	}
 }
