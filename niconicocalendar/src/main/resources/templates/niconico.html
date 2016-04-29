@@ -67,12 +67,15 @@
 		</tr>
 	</table>
 
-	<p>
-		<select>
-			<option></option>
-		</select>
-		<input type="submit" value="削除" />
-	</p>
-
+	 <form method="post" action="/delete">
+		<p>
+			<select name="userId">
+				<option th:each="user:${user}" th:value="${user.userId}" th:text="${user.username}">
+				</option>
+			</select>
+			<input type="submit" value="削除" />
+		</p>
+	</form>
+	
 </body>
 </html>
