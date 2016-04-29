@@ -19,10 +19,14 @@ public class Application implements CommandLineRunner {
 	public void run(String... strings) throws Exception {
 
 		jdbcTemplate.execute("drop table user_tbl if exists");
-		jdbcTemplate.execute("create table user_tbl(userId integer, username varchar)");
+		jdbcTemplate.execute("create table user_tbl(userId serial, username varchar)");
+		String[] users = {"yutaka", "naoki", "terahide"};
+		jdbcTemplate.update("insert into user_tbl(userId, username) values(?,?)", 1, users[0]);
+		jdbcTemplate.update("insert into user_tbl(userId, username) values(?,?)", 2, users[1]);
+		jdbcTemplate.update("insert into user_tbl(userId, username) values(?,?)", 3, users[2]);
 		
 		jdbcTemplate.execute("drop table feelings_tbl if exists");
-		jdbcTemplate.execute("create table feelings_tbl(feelingId integer, feeling varchar)");
+		jdbcTemplate.execute("create table feelings_tbl(feelingId serial, feeling varchar)");
 		String[] feelings = {"niconico","iraira","futsu","shikushiku","utouto"};
 		jdbcTemplate.update("insert into feelings_tbl(feelingId, feeling) values(?,?)", 0, feelings[0]);
 		jdbcTemplate.update("insert into feelings_tbl(feelingId, feeling) values(?,?)", 1, feelings[1]);		

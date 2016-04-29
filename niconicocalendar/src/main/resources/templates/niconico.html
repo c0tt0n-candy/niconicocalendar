@@ -52,6 +52,11 @@
 			<th class="userName">ユーザー名</th>
 			<th class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" th:text="${i}" />
 		</tr>
+
+		<tr th:each="user:${user}">
+			<td class="userName" th:text="${user.username}" />
+			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" />
+		</tr>
 	</table>
 
 	<p>
