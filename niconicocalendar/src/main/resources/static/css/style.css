@@ -35,3 +35,19 @@
 	background-color: transparent;
 	cursor: pointer;
 }
+
+/* ニコニコカレンダーtable内の要素 */
+#niconicoCalendar{
+	border-collapse: collapse;
+	margin: 0 auto;
+}
+.userName{
+	width: 100px;
+	height: 30px;
+	border: 1px solid;
+}
+.historyCalendar{
+	width: 30px;
+	height: 30px;
+	border: 1px solid;
+}
