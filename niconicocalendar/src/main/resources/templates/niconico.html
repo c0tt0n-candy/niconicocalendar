@@ -47,16 +47,10 @@
 		<input type="submit" value="登録" />
 	</p>
 
-	<div class="month">
-		<div class="lastmonth"></div>
-		<div class="currentmonth"></div>
-		<div class="nextmonth"></div>
-	</div>
-
-	<table>
+	<table id="niconicoCalendar">
 		<tr>
-			<th>ユーザー名</th>
-			<th></th>
+			<th class="userName">ユーザー名</th>
+			<th class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" th:text="${i}" />
 		</tr>
 	</table>
 
