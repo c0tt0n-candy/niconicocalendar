@@ -1,0 +1,37 @@
+#title{
+	text-align: center;
+}
+
+/* åªç›ï\é¶íÜÇÃîNåédivì‡ÇÃóvëf */
+.month {
+	width: 260px;
+	height: 50px;
+	margin: 0 auto;
+}
+.lastmonth {
+	width: 100px;
+	height: 50px;
+	float: left;
+	text-align: center;
+}
+.currentmonth {
+	width: 60px;
+	height: 50px;
+	float: left;
+	text-align: center;
+}
+.nextmonth {
+	width: 100px;
+	height: 50px;
+	float: left;
+	text-align: center;
+}
+.month input[type="submit"] {
+	position: relative;
+	top: 8px;
+	font-size: larger;
+	
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+}
