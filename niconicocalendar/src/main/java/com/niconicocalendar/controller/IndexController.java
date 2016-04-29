@@ -53,9 +53,14 @@ public class IndexController {
 	public String registerUser(Model model, @RequestParam("name") String name) {
 		
 		// ユーザー追加
-		int maxUserId = jdbcTemplate.queryForObject("select max(userId) from user_tbl", Integer.class);
-		jdbcTemplate.update("insert into user_tbl(userId, username) VALUES (?,?)", maxUserId + 1, name);
-		
+		int count = jdbcTemplate.queryForObject("select count(*) from user_tbl", Integer.class);
+		if (count > 0) {
+			int maxUserId = jdbcTemplate.queryForObject("select max(userId) from user_tbl", Integer.class);
+			jdbcTemplate.update("insert into user_tbl(userId, username) VALUES (?,?)", maxUserId + 1, name);
+		} else {
+			jdbcTemplate.update("insert into user_tbl(userId, username) VALUES (?,?)", 1, name);
+		}
+			
 		// カレンダー取得
 		Calendar calendar = Calendar.getInstance();
 		int nowYear = calendar.get(Calendar.YEAR);
