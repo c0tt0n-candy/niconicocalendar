@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>ニコニコカレンダー</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="../css/style.css" />
+<script th:src="@{../js/jquery/jquery.js}"></script>
+<script type="text/javascript"></script>
+</head>
+
+<body>
+	<p>ニコニコカレンダー</p>
+
+	<p>ユーザー名：
+		<input type="text" />
+		<input type="submit" value="ユーザ追加" />
+	</p>
+
+	<p>
+		<select name="id">
+			<option></option>
+		</select>
+		<input type="radio" value="0" />
+		<input type="radio" value="1" />
+		<input type="radio" value="2" />
+		<input type="radio" value="3" />
+		<input type="radio" value="4" />
+		<input type="submit" value="登録" />
+	</p>
+
+	<div class="month">
+		<div class="lastmonth"></div>
+		<div class="currentmonth"></div>
+		<div class="nextmonth"></div>
+	</div>
+
+	<table>
+		<tr>
+			<th>ユーザー名</th>
+			<th></th>
+		</tr>
+	</table>
+
+	<p>
+		<select name="id">
+			<option></option>
+		</select>
+		<input type="submit" value="削除" />
+	</p>
+
+</body>
+</html>
