@@ -51,15 +51,15 @@
 			<select name="userId">
 				<option th:each="user:${user}" th:value="${user.userId}" th:text="${user.username}"></option>
 			</select>
-			<input type="radio" name="feelingId" value="0" />0
-			<input type="radio" name="feelingId" value="1" />1
-			<input type="radio" name="feelingId" value="2" />2
-			<input type="radio" name="feelingId" value="3" />3
-			<input type="radio" name="feelingId" value="4" />4
+			<input type="radio" name="feelingId" value="0" /><img src="../img/niconico.png" alt="niconico" />
+			<input type="radio" name="feelingId" value="1" /><img src="../img/iraira.png" alt="iraira" />
+			<input type="radio" name="feelingId" value="2" /><img src="../img/futsu.png" alt="futsu" />
+			<input type="radio" name="feelingId" value="3" /><img src="../img/shikushiku.png" alt="shikushiku" />
+			<input type="radio" name="feelingId" value="4" /><img src="../img/utouto.png" alt="ututo" />
 			<input type="submit" value="登録" />
 		</p>
 	</form>
-
+	
 	<table id="niconicoCalendar">
 		<tr>
 			<th class="userName">ユーザー名</th>
@@ -71,7 +71,9 @@
  			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
  				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId}">
  					<th:block th:if="${feelingHistory.day == i}">
- 						<div th:text="${feelingHistory.feelingId}"></div>
+ 						<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
+  							<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
+ 						</th:block>
   					</th:block>
  				</th:block>
 			</td>

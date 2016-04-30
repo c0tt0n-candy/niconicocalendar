@@ -7,7 +7,14 @@ public class Feelings {
 	private int month;
 	private int day;
 	private int feelingId;
-
+	private String feeling;
+	
+	public Feelings(int feelingId, String feeling) {
+		super();
+		this.feelingId = feelingId;
+		this.feeling = feeling;
+	}
+	
 	public Feelings(int userId, int day, int feelingId) {
 		super();
 		this.userId = userId;
@@ -55,4 +62,11 @@ public class Feelings {
 		this.feelingId = feelingId;
 	}
 
+	public String getFeeling() {
+		return feeling;
+	}
+
+	public void setFeeling(String feeling) {
+		this.feeling = feeling;
+	}
 }
