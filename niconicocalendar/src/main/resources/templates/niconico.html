@@ -7,6 +7,10 @@
 <link rel="stylesheet" type="text/css" href="../css/style.css" />
 <script th:src="@{../js/jquery/jquery.js}"></script>
 <script type="text/javascript">
+	function selectFeeling() {
+		location.href = "/select";
+	}
+	
 	function DataCheck() {
 		if (document.registForm.name.value == "") {
 			alert("ユーザー名が入力されていません。もう一度確認して下さい。");
@@ -39,10 +43,29 @@
 		</div>
 	</div>
 	
+	<table id="niconicoCalendar">
+		<tr>
+			<th class="userName">ユーザー名</th>
+			<th class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" th:text="${i}" />
+		</tr>
+
+		<tr th:each="user:${user}">
+			<td class="userName" th:text="${user.username}" />
+	 			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer" onClick="selectFeeling()">
+		 				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
+		 						<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
+		  							<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
+		 						</th:block>
+		 				</th:block>
+				</td>
+		</tr>
+	</table>
+
+	
 	<form name="registForm" method="post" action="/regist">
 		<p>ユーザー名：
 			<input type="text" name="name" />
-			<input type="submit" value="ユーザ追加" onClick="return DataCheck();" />
+			<input type="submit" value="ユーザ追加" onClick="return DataCheck()" />
 		</p>
 	</form>
 
@@ -59,26 +82,6 @@
 			<input type="submit" value="登録" />
 		</p>
 	</form>
-	
-	<table id="niconicoCalendar">
-		<tr>
-			<th class="userName">ユーザー名</th>
-			<th class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" th:text="${i}" />
-		</tr>
-
-		<tr th:each="user:${user}">
-			<td class="userName" th:text="${user.username}" />
- 			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
- 				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId}">
- 					<th:block th:if="${feelingHistory.day == i}">
- 						<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
-  							<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
- 						</th:block>
-  					</th:block>
- 				</th:block>
-			</td>
-		</tr>
-	</table>
 
 	 <form method="post" action="/delete">
 		<p>
