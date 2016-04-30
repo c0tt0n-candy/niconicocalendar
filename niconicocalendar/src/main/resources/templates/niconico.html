@@ -6,7 +6,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css/style.css" />
 <script th:src="@{../js/jquery/jquery.js}"></script>
-<script type="text/javascript"></script>
+<script type="text/javascript">
+	function DataCheck() {
+		if (document.registForm.name.value == "") {
+			alert("ユーザー名が入力されていません。もう一度確認して下さい。");
+			return false;
+		} else {
+			return true;
+		}
+	}
+</script>
 </head>
 
 <body>
@@ -30,10 +39,10 @@
 		</div>
 	</div>
 	
-	<form method="post" action="/regist">
+	<form name="registForm" method="post" action="/regist">
 		<p>ユーザー名：
 			<input type="text" name="name" />
-			<input type="submit" value="ユーザ追加" />
+			<input type="submit" value="ユーザ追加" onClick="return DataCheck();" />
 		</p>
 	</form>
 
