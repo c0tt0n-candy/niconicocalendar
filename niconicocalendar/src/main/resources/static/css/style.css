@@ -140,11 +140,16 @@
 	height: 0;
 	cursor: pointer;
 }
+#cancelSelect {
+	position: absolute;
+	top: 200px;
+	left: 250px;
+	cursor: pointer;
+}
 #deleteFeeling {
 	position: absolute;
 	top: 200px;
 	left: 350px;
-	text-align: center;
 	cursor: pointer;
 }
 #deleteFeeling:disabled{
