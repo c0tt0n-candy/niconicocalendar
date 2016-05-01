@@ -95,8 +95,8 @@ $(document).ready(function(){
 		<h1>ニコニコカレンダー</h1>
 	</div>
 	
-	<div id="selectFeeling">
-		<p th:text="${year}+'/'+${month}+'/'+${day}" />
+	<div class="windowDiv">
+		<p id="selectDate" th:text="${dispYear}+'/'+${dispMonth}+'/'+${day}" />
 		<h2>登録内容を選択してください。</h2>
 		<table class="list">
 			<tr>
@@ -122,7 +122,7 @@ $(document).ready(function(){
 				</label></td>
 			</tr>
 		</table>
-		<input id="cancelSelect" type="button" value="キャンセル" onClick="history.back()"/>
+		<input class="cancel" type="button" value="キャンセル" onClick="history.back()"/>
 		<input id="deleteFeeling" type="submit" value="登録内容を削除する" onClick="deleteFeeling()" />
 	</div>
 	
@@ -150,7 +150,7 @@ $(document).ready(function(){
 		<tr th:each="user:${user}">
 			<td>
 				<div class="configDiv">
-					<img class="deleteImg" th:src="@{/img/delete.png}" />
+					<img class="configImg" th:src="@{/img/config.png}" />
 				</div>
 			</td>
 			<td class="userName" th:text="${user.username}" />
@@ -166,8 +166,8 @@ $(document).ready(function(){
 
 	<!-- 各種情報を受け取り -->
 	<input type="hidden" id="getUserId" th:value="${userId}" />
-	<input type="hidden" id="getYear" th:value="${year}" />
-	<input type="hidden" id="getMonth" th:value="${month}" />
+	<input type="hidden" id="getYear" th:value="${dispYear}" />
+	<input type="hidden" id="getMonth" th:value="${dispMonth}" />
 	<input type="hidden" id="getDay" th:value="${day}" />
 	<input type="hidden" id="getSelectedFeelingId" th:value="${selectedFeelingId}" />
 	

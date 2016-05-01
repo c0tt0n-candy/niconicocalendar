@@ -52,27 +52,15 @@ public class IndexController {
 		return "niconico";
 	}
 	
-	@RequestMapping(value = "/register/user")
-	public String registerUser(Model model, @RequestParam("name") String name) {
-		
-		// ユーザー追加
-		int count = jdbcTemplate.queryForObject("select count(*) from user_tbl", Integer.class);
-		if (count > 0) {
-			int maxUserId = jdbcTemplate.queryForObject("select max(userId) from user_tbl", Integer.class);
-			jdbcTemplate.update("insert into user_tbl(userId, username) VALUES (?,?)", maxUserId + 1, name);
-		} else {
-			jdbcTemplate.update("insert into user_tbl(userId, username) VALUES (?,?)", 1, name);
-		}
+	@RequestMapping(value = "/edit/user")
+	public String editUser(Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
 			
 		// カレンダー取得
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
+
 		Calendar calendar = Calendar.getInstance();
-		int nowYear = calendar.get(Calendar.YEAR);
-		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-
-		model.addAttribute("dispYear", nowYear);
-		model.addAttribute("dispMonth", nowMonth);
-
-		calendar.set(nowYear, nowMonth - 1, 1);
+		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
 		model.addAttribute("lastDay", lastDay);
 		
@@ -88,7 +76,46 @@ public class IndexController {
 		
 		// 履歴を取得
 		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), year, month);
+		model.addAttribute("feelingHistory", feelingHistory);
+		
+		return "regist";
+	}
+	
+	@RequestMapping(value = "/register/user")
+	public String registerUser(Model model, @RequestParam("name") String name, @RequestParam("year") int year, @RequestParam("month") int month) {
+		
+		// ユーザー追加
+		int count = jdbcTemplate.queryForObject("select count(*) from user_tbl", Integer.class);
+		if (count > 0) {
+			int maxUserId = jdbcTemplate.queryForObject("select max(userId) from user_tbl", Integer.class);
+			jdbcTemplate.update("insert into user_tbl(userId, username) VALUES (?,?)", maxUserId + 1, name);
+		} else {
+			jdbcTemplate.update("insert into user_tbl(userId, username) VALUES (?,?)", 1, name);
+		}
+			
+		// カレンダー取得
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month - 1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("lastDay", lastDay);
+		
+		// ユーザーを取得
+		List<User> user = jdbcTemplate.query("select * from user_tbl",
+				(rs, rowNum) -> new User(rs.getInt("userId"), rs.getString("username")));
+		model.addAttribute("user", user);
+
+		// Feelingsを取得
+		List<Feelings> feelings = jdbcTemplate.query("select * from feelings_tbl",
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingId"), rs.getString("feeling")));
+		model.addAttribute("feelings", feelings);
+		
+		// 履歴を取得
+		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), year, month);
 		model.addAttribute("feelingHistory", feelingHistory);
 		
 		return "niconico";
@@ -247,8 +274,6 @@ public class IndexController {
 		}
 		
 		model.addAttribute("userId",userId);
-		model.addAttribute("year",year);
-		model.addAttribute("month",month);
 		model.addAttribute("day",day);
 		model.addAttribute("selectedFeelingId",selectedFeelingId);
 		

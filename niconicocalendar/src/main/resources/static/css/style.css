@@ -68,7 +68,7 @@
 	max-width: 20px;
 	max-height: 20px;
 }
-.deleteImg {
+.configImg {
 	display: table-cell;
 	vertical-align: middle;
 	text-align: center;
@@ -100,8 +100,8 @@
 	margin-bottom: -5px;
 }
 
-/* selectFeeling.html“ÆŽ©‚Ìdiv“à */
-#selectFeeling {
+/* select.html,regist.html‹¤’Ê‚Ì—v‘f */
+.windowDiv {
 	position: absolute;
 	left: 50%;
 	margin-left: -250px;
@@ -112,11 +112,20 @@
 	border: 1px solid;
 	border-radius: 25px;
 }
-#selectFeeling p {
-	margin-left: 20px;
-}
-#selectFeeling h2 {
+.windowDiv h2 {
 	text-align: center;
+}
+.cancel {
+	position: absolute;
+	top: 200px;
+	left: 250px;
+	cursor: pointer;
+}
+
+
+/* select.html“ÆŽ©‚Ìdiv“à */
+#selectDate {
+	margin-left: 20px;
 }
 .list {
 	position: absolute;
@@ -140,12 +149,6 @@
 	height: 0;
 	cursor: pointer;
 }
-#cancelSelect {
-	position: absolute;
-	top: 200px;
-	left: 250px;
-	cursor: pointer;
-}
 #deleteFeeling {
 	position: absolute;
 	top: 200px;
@@ -154,4 +157,30 @@
 }
 #deleteFeeling:disabled{
 	cursor: default;
+}
+
+/* regist.html“ÆŽ©‚Ìdiv“à */
+#failMessage {
+	position: absolute;
+	color: #ffffff;
+	top: 40px;
+	left: 75px;
+	cursor: default;
+}
+#inputName {
+	position: absolute;
+	top: 85px;
+	left: 75px;
+	font-size: 40px;
+	width: 350px;
+	height: 60px;
+	padding: 5px;
+	border: solid 1px;
+	border-radius: 3px;
+}
+#registerUser {
+	position: absolute;
+	top: 200px;
+	left: 350px;
+	cursor: pointer;
 }

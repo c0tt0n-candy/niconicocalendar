@@ -34,22 +34,21 @@
 		selectForm.submit();
 	}
 	
-	function registerUser() {
-		var str = prompt("ユーザー名を入力して下さい。","");
-		if (str == "") {
-			alert("ユーザー名が入力されていません。もう一度確認して下さい。");
-			registerUser();
-		} else if (str != null) {
-			var registForm = document.createElement("form");
-			registForm.action = "/register/user";
-			registForm.method = "post";
-			var registInput = document.createElement("input");
-			registInput.setAttribute("type", "hidden");
-			registInput.setAttribute("name", "name");
-			registInput.setAttribute("value", str);
-			registForm.appendChild(registInput);
-			registForm.submit();
-		}
+	function registerUser(year, month) {
+		var registerForm = document.createElement("form");
+		registerForm.action = "/edit/user";
+		registerForm.method = "post";
+		var registerInput1 = document.createElement("input");
+		registerInput1.setAttribute("type", "hidden");
+		registerInput1.setAttribute("name", "year");
+		registerInput1.setAttribute("value", year);
+		registerForm.appendChild(registerInput1);
+		var registerInput2 = document.createElement("input");
+		registerInput2.setAttribute("type", "hidden");
+		registerInput2.setAttribute("name", "month");
+		registerInput2.setAttribute("value", month);
+		registerForm.appendChild(registerInput2);
+		registerForm.submit();
 	}
 	
 	function deleteUser(userId) {
@@ -95,7 +94,7 @@
 	<table id="niconicoCalendar">
 		<tr>
 			<td>
-				<div class="configDiv" onClick="registerUser()">
+				<div class="configDiv" th:onClick="'registerUser('+${dispYear}+','+${dispMonth}+')'">
 					<img class="registImg" th:src="@{/img/regist.png}" alt="追加" />
 				</div>
 			</td>
@@ -106,7 +105,7 @@
 		<tr th:each="user:${user}">
 			<td>
 				<div class="configDiv" th:onClick="'deleteUser('+${user.userId}+')'">
-					<img class="deleteImg" th:src="@{/img/delete.png}" />
+					<img class="configImg" th:src="@{/img/config.png}" />
 				</div>
 			</td>
 			<td class="userName" th:text="${user.username}" />
