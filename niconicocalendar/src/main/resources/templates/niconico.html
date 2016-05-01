@@ -28,6 +28,23 @@
 			registForm.submit();
 		}
 	}
+	
+	function deleteUser(userId) {
+		if(confirm("ユーザーを削除します。本当に宜しいでしょうか？")){
+			var deleteForm = document.createElement("form");
+			deleteForm.action = "/delete";
+			deleteForm.method = "post";
+			var deleteInput = document.createElement("input");
+			deleteInput.setAttribute("type", "hidden");
+			deleteInput.setAttribute("name", "userId");
+			deleteInput.setAttribute("value", userId);
+			deleteForm.appendChild(deleteInput);
+			deleteForm.submit();
+		}
+		else{
+			alert("キャンセルされました。");
+		}
+	}
 </script>
 </head>
 
@@ -65,7 +82,7 @@
 
 		<tr th:each="user:${user}">
 			<td>
-				<div class="configDiv">
+				<div class="configDiv" th:onClick="'deleteUser('+${user.userId}+')'">
 					<img class="deleteImg" th:src="@{/img/delete.png}" />
 				</div>
 			</td>
@@ -94,7 +111,7 @@
 		</p>
 	</form>
 
-	 <form method="post" action="/delete">
+<!-- 	 <form method="post" action="/delete">
 		<p>
 			<select name="userId">
 				<option th:each="user:${user}" th:value="${user.userId}" th:text="${user.username}">
@@ -102,7 +119,7 @@
 			</select>
 			<input type="submit" value="削除" />
 		</p>
-	</form>
+	</form> -->
 	
 </body>
 </html>
