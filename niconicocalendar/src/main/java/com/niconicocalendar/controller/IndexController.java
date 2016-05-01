@@ -185,7 +185,7 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value = "/select")
-	public String selectFeeling(Model model) {
+	public String selectFeeling(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
 		
 		// カレンダー取得
 		Calendar calendar = Calendar.getInstance();
@@ -214,6 +214,11 @@ public class IndexController {
 		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
 				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
 		model.addAttribute("feelingHistory", feelingHistory);
+		
+		model.addAttribute("userId",userId);
+		model.addAttribute("year",year);
+		model.addAttribute("month",month);
+		model.addAttribute("day",day);
 		
 		return "selectFeeling";
 	}

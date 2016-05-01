@@ -1,10 +1,13 @@
 #title{
+	position: relative;
+	width: 100%;
 	text-align: center;
 }
 
 /* 現在表示中の年月div内の要素 */
 .month {
-	width: 260px;
+	position: relative;
+	width: 260px;;
 	height: 50px;
 	margin: 0 auto;
 }
@@ -38,10 +41,10 @@
 
 /* ニコニコカレンダーtable内の要素 */
 #niconicoCalendar {
+	position: relative;
 	border-collapse: collapse;
 	margin: 0 auto;
 }
-
 .configDiv {
 	width: 22px;
 	height: 22px;
@@ -52,7 +55,6 @@
 	top: -4px;
 	cursor: pointer;
 }
-
 .registImg {
 	display: table-cell;
 	vertical-align: middle;
@@ -66,7 +68,6 @@
 	max-width: 20px;
 	max-height: 20px;
 }
-
 .deleteImg {
 	display: table-cell;
 	vertical-align: middle;
@@ -80,14 +81,12 @@
 	max-width: 20px;
 	max-height: 20px;
 }
-
 .userName {
 	width: 100px;
 	height: 30px;
 	border: 1px solid;
 	text-align: center;
 }
-
 .historyCalendar {
 	width: 30px;
 	height: 30px;
@@ -95,9 +94,24 @@
 	text-align: center;
 	vertical-align: middle;
 }
-
 .feelingImg {
 	width: 29px;
 	height: 29px;
 	margin-bottom: -5px;
+}
+
+/* selectFeeling.html独自のdiv内 */
+#selectFeeling {
+	position: absolute;
+	left: 50%;
+	margin-left: -250px;
+	width: 500px;
+	height: 300px;
+	z-index: 1;
+	background-color: #ffffff;
+	border: 1px solid;
+	border-radius: 25px;
+}
+#selectFeeling h2 {
+	text-align: center;
 }

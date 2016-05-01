@@ -14,7 +14,12 @@
 	<div id="title">
 		<h1>ニコニコカレンダー</h1>
 	</div>
-
+	
+	<div id="selectFeeling">
+		<h2>登録内容を選択してください。</h2>
+		
+	</div>
+	
 	<div class="month">
 		<div class="lastmonth">
 			<input type="submit" th:value="＜" />
@@ -27,11 +32,21 @@
 	
 	<table id="niconicoCalendar">
 		<tr>
+			<td>
+				<div class="configDiv">
+					<img class="registImg" th:src="@{/img/regist.png}" alt="追加" />
+				</div>
+			</td>
 			<th class="userName">ユーザー名</th>
 			<th class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" th:text="${i}" />
 		</tr>
 
 		<tr th:each="user:${user}">
+			<td>
+				<div class="configDiv">
+					<img class="deleteImg" th:src="@{/img/delete.png}" />
+				</div>
+			</td>
 			<td class="userName" th:text="${user.username}" />
 	 			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer">
 		 				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
@@ -43,17 +58,7 @@
 		</tr>
 	</table>
 
-	
-	
-	
-	
-	<form name="registForm" method="post" action="/regist">
-		<p>ユーザー名：
-			<input type="text" name="name" />
-			<input type="submit" value="ユーザ追加" onClick="return DataCheck()" />
-		</p>
-	</form>
-
+<!-- 
  	<form method="post" action="/feel" >
 		<p>
 			<select name="userId">
@@ -67,16 +72,7 @@
 			<input type="submit" value="登録" />
 		</p>
 	</form>
+ -->
 
-	 <form method="post" action="/delete">
-		<p>
-			<select name="userId">
-				<option th:each="user:${user}" th:value="${user.userId}" th:text="${user.username}">
-				</option>
-			</select>
-			<input type="submit" value="削除" />
-		</p>
-	</form>
-	
 </body>
 </html>
