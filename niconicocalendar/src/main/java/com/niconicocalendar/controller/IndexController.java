@@ -26,7 +26,6 @@ public class IndexController {
 		Calendar calendar = Calendar.getInstance();
 		int nowYear = calendar.get(Calendar.YEAR);
 		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-		int nowDay = calendar.get(Calendar.DATE);
 
 		model.addAttribute("dispYear", nowYear);
 		model.addAttribute("dispMonth", nowMonth);
@@ -69,7 +68,6 @@ public class IndexController {
 		Calendar calendar = Calendar.getInstance();
 		int nowYear = calendar.get(Calendar.YEAR);
 		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-		int nowDay = calendar.get(Calendar.DATE);
 
 		model.addAttribute("dispYear", nowYear);
 		model.addAttribute("dispMonth", nowMonth);
@@ -111,7 +109,6 @@ public class IndexController {
 		Calendar calendar = Calendar.getInstance();
 		int nowYear = calendar.get(Calendar.YEAR);
 		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-		int nowDay = calendar.get(Calendar.DATE);
 
 		model.addAttribute("dispYear", nowYear);
 		model.addAttribute("dispMonth", nowMonth);
@@ -142,15 +139,11 @@ public class IndexController {
 	public String registFeeling(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("feelingId") int feelingId) {
 		
 		// カレンダー取得
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
+		
 		Calendar calendar = Calendar.getInstance();
-		int nowYear = calendar.get(Calendar.YEAR);
-		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-		int nowDay = calendar.get(Calendar.DATE);
-
-		model.addAttribute("dispYear", nowYear);
-		model.addAttribute("dispMonth", nowMonth);
-
-		calendar.set(nowYear, nowMonth - 1, 1);
+		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
 		model.addAttribute("lastDay", lastDay);
 		
@@ -177,7 +170,7 @@ public class IndexController {
 		
 		// 履歴を取得
 		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), year, month);
 		model.addAttribute("feelingHistory", feelingHistory);
 		
 		return "niconico";
@@ -187,15 +180,11 @@ public class IndexController {
 	public String deleteFeeling(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
 		
 		// カレンダー取得
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
+
 		Calendar calendar = Calendar.getInstance();
-		int nowYear = calendar.get(Calendar.YEAR);
-		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-		int nowDay = calendar.get(Calendar.DATE);
-
-		model.addAttribute("dispYear", nowYear);
-		model.addAttribute("dispMonth", nowMonth);
-
-		calendar.set(nowYear, nowMonth - 1, 1);
+		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
 		model.addAttribute("lastDay", lastDay);
 		
@@ -215,7 +204,7 @@ public class IndexController {
 		
 		// 履歴を取得
 		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), year, month);
 		model.addAttribute("feelingHistory", feelingHistory);
 		
 		return "niconico";
@@ -225,15 +214,11 @@ public class IndexController {
 	public String selectFeeling(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
 		
 		// カレンダー取得
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
+		
 		Calendar calendar = Calendar.getInstance();
-		int nowYear = calendar.get(Calendar.YEAR);
-		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-		int nowDay = calendar.get(Calendar.DATE);
-
-		model.addAttribute("dispYear", nowYear);
-		model.addAttribute("dispMonth", nowMonth);
-
-		calendar.set(nowYear, nowMonth - 1, 1);
+		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
 		model.addAttribute("lastDay", lastDay);
 		
@@ -249,7 +234,7 @@ public class IndexController {
 		
 		// 履歴を取得
 		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), year, month);
 		model.addAttribute("feelingHistory", feelingHistory);
 		
 		// 選択日の履歴があれば取得
@@ -270,4 +255,76 @@ public class IndexController {
 		return "select";
 	}
 	
+	@RequestMapping(value = "/previous")
+	public String getPrevious(Model model, @RequestParam("previous") String previous) {
+		String[] prev = previous.split("/");
+		int prevYear = Integer.parseInt(prev[0]);
+		int prevMonth = Integer.parseInt(prev[1]);
+		if(prevMonth == 0){
+			prevYear -= 1;
+			prevMonth = 12;
+		}
+		model.addAttribute("dispYear",prevYear);
+		model.addAttribute("dispMonth",prevMonth);
+		
+		// カレンダー取得
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(prevYear, prevMonth - 1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("lastDay", lastDay);
+		
+		// ユーザーを取得
+		List<User> user = jdbcTemplate.query("select * from user_tbl",
+				(rs, rowNum) -> new User(rs.getInt("userId"), rs.getString("username")));
+		model.addAttribute("user", user);
+		
+		// Feelingsを取得
+		List<Feelings> feelings = jdbcTemplate.query("select * from feelings_tbl",
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingId"), rs.getString("feeling")));
+		model.addAttribute("feelings", feelings);
+		
+		// 履歴を取得
+		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), prevYear, prevMonth);
+		model.addAttribute("feelingHistory", feelingHistory);
+		
+		return "niconico";
+	}
+	
+	@RequestMapping(value = "/next")
+	public String getNext(Model model, @RequestParam("next") String next) {
+		String[] Next = next.split("/");
+		
+		int nextYear = Integer.parseInt(Next[0]);
+		int nextMonth = Integer.parseInt(Next[1]);
+		if(nextMonth == 13){
+			nextYear += 1;
+			nextMonth = 1;
+		}
+		model.addAttribute("dispYear",nextYear);
+		model.addAttribute("dispMonth",nextMonth);
+		
+		// カレンダー取得
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(nextYear, nextMonth - 1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("lastDay", lastDay);
+		
+		// ユーザーを取得
+		List<User> user = jdbcTemplate.query("select * from user_tbl",
+				(rs, rowNum) -> new User(rs.getInt("userId"), rs.getString("username")));
+		model.addAttribute("user", user);
+		
+		// Feelingsを取得
+		List<Feelings> feelings = jdbcTemplate.query("select * from feelings_tbl",
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingId"), rs.getString("feeling")));
+		model.addAttribute("feelings", feelings);
+		
+		// 履歴を取得
+		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nextYear, nextMonth);
+		model.addAttribute("feelingHistory", feelingHistory);
+		
+		return "niconico";
+	}
 }

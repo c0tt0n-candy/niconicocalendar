@@ -78,14 +78,14 @@
 
 	<div class="month">
 		<div class="lastmonth">
-			<form>
+			<form method="get" action="/previous">
 				<input type="hidden" name="previous" th:value="${dispYear}+'/'+(${dispMonth}-1)" />
 				<input type="submit" th:value="＜" />
 			</form>
 		</div>
 		<div class="currentmonth" th:text="${dispYear}+年+' '+${dispMonth}+月"></div>
 		<div class="nextmonth">
-			<form>
+			<form method="get" action="/next">
 				<input type="hidden" name="next" th:value="${dispYear}+'/'+(${dispMonth}+1)" />
 				<input type="submit" th:value="＞" />
 			</form>
