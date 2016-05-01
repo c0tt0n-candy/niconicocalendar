@@ -11,12 +11,21 @@
 		location.href = "/select";
 	}
 	
-	function DataCheck() {
-		if (document.registForm.name.value == "") {
+	function registerUser() {
+		var str = prompt("ユーザー名を入力して下さい。","");
+		if (str == "") {
 			alert("ユーザー名が入力されていません。もう一度確認して下さい。");
-			return false;
-		} else {
-			return true;
+			registerUser();
+		} else if (str != null) {
+			var registForm = document.createElement("form");
+			registForm.action = "/regist";
+			registForm.method = "post";
+			var registInput = document.createElement("input");
+			registInput.setAttribute("type", "hidden");
+			registInput.setAttribute("name", "name");
+			registInput.setAttribute("value", str);
+			registForm.appendChild(registInput);
+			registForm.submit();
 		}
 	}
 </script>
@@ -45,40 +54,42 @@
 	
 	<table id="niconicoCalendar">
 		<tr>
+			<td>
+				<div class="configDiv" onClick="registerUser()">
+					<img class="registImg" th:src="@{/img/regist.png}" alt="追加" />
+				</div>
+			</td>
 			<th class="userName">ユーザー名</th>
 			<th class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" th:text="${i}" />
 		</tr>
 
 		<tr th:each="user:${user}">
+			<td>
+				<div class="configDiv">
+					<img class="deleteImg" th:src="@{/img/delete.png}" />
+				</div>
+			</td>
 			<td class="userName" th:text="${user.username}" />
-	 			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer" onClick="selectFeeling()">
-		 				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
-		 						<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
-		  							<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
-		 						</th:block>
-		 				</th:block>
-				</td>
+	 		<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer" onClick="selectFeeling()">
+		 			<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
+		 					<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
+		  						<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
+		 					</th:block>
+		 			</th:block>
+			</td>
 		</tr>
 	</table>
-
-	
-	<form name="registForm" method="post" action="/regist">
-		<p>ユーザー名：
-			<input type="text" name="name" />
-			<input type="submit" value="ユーザ追加" onClick="return DataCheck()" />
-		</p>
-	</form>
 
  	<form method="post" action="/feel" >
 		<p>
 			<select name="userId">
 				<option th:each="user:${user}" th:value="${user.userId}" th:text="${user.username}"></option>
 			</select>
-			<input type="radio" name="feelingId" value="0" /><img src="../img/niconico.png" alt="niconico" />
-			<input type="radio" name="feelingId" value="1" /><img src="../img/iraira.png" alt="iraira" />
-			<input type="radio" name="feelingId" value="2" /><img src="../img/futsu.png" alt="futsu" />
-			<input type="radio" name="feelingId" value="3" /><img src="../img/shikushiku.png" alt="shikushiku" />
-			<input type="radio" name="feelingId" value="4" /><img src="../img/utouto.png" alt="ututo" />
+			<input type="radio" name="feelingId" value="0" /><img th:src="@{/img/niconico.png}" alt="niconico" />
+			<input type="radio" name="feelingId" value="1" /><img th:src="@{/img/iraira.png}" alt="iraira" />
+			<input type="radio" name="feelingId" value="2" /><img th:src="@{/img/futsu.png}" alt="futsu" />
+			<input type="radio" name="feelingId" value="3" /><img th:src="@{/img/shikushiku.png}" alt="shikushiku" />
+			<input type="radio" name="feelingId" value="4" /><img th:src="@{/img/utouto.png}" alt="ututo" />
 			<input type="submit" value="登録" />
 		</p>
 	</form>

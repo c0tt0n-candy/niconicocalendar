@@ -215,7 +215,7 @@ public class IndexController {
 				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
 		model.addAttribute("feelingHistory", feelingHistory);
 		
-		return "niconico";
+		return "selectFeeling";
 	}
 	
 }
