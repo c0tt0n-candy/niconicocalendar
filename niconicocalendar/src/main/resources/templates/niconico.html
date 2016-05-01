@@ -41,7 +41,7 @@
 			registerUser();
 		} else if (str != null) {
 			var registForm = document.createElement("form");
-			registForm.action = "/regist";
+			registForm.action = "/register/user";
 			registForm.method = "post";
 			var registInput = document.createElement("input");
 			registInput.setAttribute("type", "hidden");
@@ -55,7 +55,7 @@
 	function deleteUser(userId) {
 		if(confirm("ユーザーを削除します。本当に宜しいでしょうか？")){
 			var deleteForm = document.createElement("form");
-			deleteForm.action = "/delete";
+			deleteForm.action = "/delete/user";
 			deleteForm.method = "post";
 			var deleteInput = document.createElement("input");
 			deleteInput.setAttribute("type", "hidden");

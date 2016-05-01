@@ -112,12 +112,15 @@
 	border: 1px solid;
 	border-radius: 25px;
 }
+#selectFeeling p {
+	margin-left: 20px;
+}
 #selectFeeling h2 {
 	text-align: center;
 }
 .list {
 	position: absolute;
-	top: 80px;
+	top: 120px;
 	left: 39px;
 }
 .check {
@@ -142,4 +145,8 @@
 	top: 200px;
 	left: 350px;
 	text-align: center;
+	cursor: pointer;
+}
+#deleteFeeling:disabled{
+	cursor: default;
 }

@@ -53,8 +53,7 @@ public class IndexController {
 		return "niconico";
 	}
 	
-	
-	@RequestMapping(value = "/regist")
+	@RequestMapping(value = "/register/user")
 	public String registerUser(Model model, @RequestParam("name") String name) {
 		
 		// ユーザー追加
@@ -97,7 +96,7 @@ public class IndexController {
 		return "niconico";
 	}
 	
-	@RequestMapping(value = "/delete")
+	@RequestMapping(value = "/delete/user")
 	public String deleteUser(Model model, @RequestParam("userId") int userId) {
 		
 		// ユーザー削除
@@ -139,8 +138,8 @@ public class IndexController {
 		return "niconico";
 	}
 	
-	@RequestMapping(value = "/feel")
-	public String registFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("feelingId") int feelingId) {
+	@RequestMapping(value = "/register/feeling")
+	public String registFeeling(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("feelingId") int feelingId) {
 		
 		// カレンダー取得
 		Calendar calendar = Calendar.getInstance();
@@ -165,6 +164,44 @@ public class IndexController {
 			jdbcTemplate.update("update feelings_history_tbl set feelingId=? where userId=? and year=? and month=? and day=? ",
 					feelingId, userId, year, month, day);
 		}
+		
+		// ユーザーを取得
+		List<User> user = jdbcTemplate.query("select * from user_tbl",
+				(rs, rowNum) -> new User(rs.getInt("userId"), rs.getString("username")));
+		model.addAttribute("user", user);
+		
+		// Feelingsを取得
+		List<Feelings> feelings = jdbcTemplate.query("select * from feelings_tbl",
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingId"), rs.getString("feeling")));
+		model.addAttribute("feelings", feelings);
+		
+		// 履歴を取得
+		List<Feelings> feelingHistory = jdbcTemplate.query("select userId, day, feelingId from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
+		model.addAttribute("feelingHistory", feelingHistory);
+		
+		return "niconico";
+	}
+	
+	@RequestMapping(value = "/delete/feeling")
+	public String deleteFeeling(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
+		
+		// カレンダー取得
+		Calendar calendar = Calendar.getInstance();
+		int nowYear = calendar.get(Calendar.YEAR);
+		int nowMonth = calendar.get(Calendar.MONTH) + 1;
+		int nowDay = calendar.get(Calendar.DATE);
+
+		model.addAttribute("dispYear", nowYear);
+		model.addAttribute("dispMonth", nowMonth);
+
+		calendar.set(nowYear, nowMonth - 1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("lastDay", lastDay);
+		
+		// ニコニコ削除
+		jdbcTemplate.update("delete from feelings_history_tbl where userId=? and year=? and month=? and day=?",
+					userId, year, month, day);
 		
 		// ユーザーを取得
 		List<User> user = jdbcTemplate.query("select * from user_tbl",
@@ -215,12 +252,22 @@ public class IndexController {
 				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingId")), nowYear, nowMonth);
 		model.addAttribute("feelingHistory", feelingHistory);
 		
+		// 選択日の履歴があれば取得
+		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
+				Integer.class, userId, year, month, day);
+		int selectedFeelingId = -1;
+		if (count != 0) {
+			selectedFeelingId = jdbcTemplate.queryForObject("select feelingId from feelings_history_tbl where userId=? and year=? and month=? and day=?",
+				Integer.class, userId, year, month, day);
+		}
+		
 		model.addAttribute("userId",userId);
 		model.addAttribute("year",year);
 		model.addAttribute("month",month);
 		model.addAttribute("day",day);
+		model.addAttribute("selectedFeelingId",selectedFeelingId);
 		
-		return "selectFeeling";
+		return "select";
 	}
 	
 }
