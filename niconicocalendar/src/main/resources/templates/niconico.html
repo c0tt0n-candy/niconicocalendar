@@ -119,21 +119,6 @@
 			</td>
 		</tr>
 	</table>
-
-
- 	<form method="post" action="/feel" >
-		<p>
-			<select name="userId">
-				<option th:each="user:${user}" th:value="${user.userId}" th:text="${user.username}"></option>
-			</select>
-			<input type="radio" name="feelingId" value="0" /><img th:src="@{/img/niconico.png}" alt="niconico" />
-			<input type="radio" name="feelingId" value="1" /><img th:src="@{/img/iraira.png}" alt="iraira" />
-			<input type="radio" name="feelingId" value="2" /><img th:src="@{/img/futsu.png}" alt="futsu" />
-			<input type="radio" name="feelingId" value="3" /><img th:src="@{/img/shikushiku.png}" alt="shikushiku" />
-			<input type="radio" name="feelingId" value="4" /><img th:src="@{/img/utouto.png}" alt="ututo" />
-			<input type="submit" value="登録" />
-		</p>
-	</form>
 	
 </body>
 </html>

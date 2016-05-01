@@ -106,12 +106,40 @@
 	left: 50%;
 	margin-left: -250px;
 	width: 500px;
-	height: 300px;
+	height: 230px;
 	z-index: 1;
 	background-color: #ffffff;
 	border: 1px solid;
 	border-radius: 25px;
 }
 #selectFeeling h2 {
+	text-align: center;
+}
+.list {
+	position: absolute;
+	top: 80px;
+	left: 39px;
+}
+.check {
+	width: 80px;
+	height: 40px;
+}
+.check input {
+	opacity: 0;
+}
+.label {
+	position: relative;
+	padding-left: 0px;
+}
+.label:hover {
+	content: "";
+	width: 0;
+	height: 0;
+	cursor: pointer;
+}
+#deleteFeeling {
+	position: absolute;
+	top: 200px;
+	left: 350px;
 	text-align: center;
 }

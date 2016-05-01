@@ -140,7 +140,7 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value = "/feel")
-	public String registFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("feelingId") int feelingId) {
+	public String registFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("feelingId") int feelingId) {
 		
 		// カレンダー取得
 		Calendar calendar = Calendar.getInstance();
@@ -157,13 +157,13 @@ public class IndexController {
 		
 		// ニコニコ登録
 		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
-				Integer.class, userId, nowYear, nowMonth, nowDay);
+				Integer.class, userId, year, month, day);
 		if (count == 0) {
 			jdbcTemplate.update("insert into feelings_history_tbl(userId, year, month, day, feelingId) VALUES (?,?,?,?,?)",
-					userId, nowYear, nowMonth, nowDay, feelingId);
+					userId, year, month, day, feelingId);
 		} else {
 			jdbcTemplate.update("update feelings_history_tbl set feelingId=? where userId=? and year=? and month=? and day=? ",
-					feelingId, userId, nowYear, nowMonth, nowDay);
+					feelingId, userId, year, month, day);
 		}
 		
 		// ユーザーを取得
