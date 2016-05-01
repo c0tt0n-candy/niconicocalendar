@@ -10,7 +10,8 @@
 	function registerUser() {
 		var str = document.getElementById("inputName").value;
 		if(str == ""){
-			document.getElementById("failMessage").style.color = "#ff0000";
+			var elements = document.getElementsByClassName("failMessage");
+			elements[0].style.color = "#ff0000";
 		}else{
 			var year = document.getElementById("getYear").value;
 			var month = document.getElementById("getMonth").value;
@@ -45,7 +46,7 @@
 	
 	<div class="windowDiv">
 		<h2>ユーザー名を入力してください。</h2>
-		<p id="failMessage">ユーザー名が入力されていません。</p>
+		<p class="failMessage">ユーザー名が入力されていません。</p>
 		<input id="inputName" type="text" value="" maxlength="10" />
 		<input class="cancel" type="button" value="キャンセル" onClick="history.back()"/>
 		<input id="registerUser" type="submit" value="登録" onClick="registerUser()" />
