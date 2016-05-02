@@ -148,8 +148,6 @@ body {
 
 	text-shadow: 1px 1px 2px #000;
 	background-color: #4169E1;
-
-    cursor: pointer;
 }
 
 /* select.html“ÆŽ©‚Ìdiv“à */
@@ -191,6 +189,11 @@ body {
 	cursor: pointer;
 }
 #deleteFeeling:disabled{
+	color: #e6e6ff;
+	text-shadow: none;
+	box-shadow:2px 2px 30px -2px #8080ff inset;
+	-moz-box-shadow:2px 2px 30px -2px #8080ff inset;
+	-webkit-box-shadow:2px 2px 30px -2px #8080ff inset;
 	cursor: default;
 }
 
