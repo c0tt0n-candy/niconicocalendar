@@ -1,0 +1,251 @@
+body {
+	background-color: #dddddd;
+}
+
+#title{
+	position: relative;
+	width: 100%;
+	text-align: center;
+}
+
+/* 現在表示中の年月div内の要素 */
+.month {
+	position: relative;
+	width: 260px;;
+	height: 50px;
+	margin: 0 auto;
+}
+.lastmonth {
+	width: 100px;
+	height: 50px;
+	float: left;
+	text-align: center;
+	cursor: default;
+}
+.currentmonth {
+	width: 60px;
+	height: 50px;
+	float: left;
+	text-align: center;
+}
+.nextmonth {
+	width: 100px;
+	height: 50px;
+	float: left;
+	text-align: center;
+	cursor: default;
+}
+.month input[type="submit"] {
+	position: relative;
+	top: 8px;
+	font-size: larger;
+
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+/* ニコニコカレンダーtable内の要素 */
+#niconicoCalendar {
+	position: relative;
+	border-collapse: collapse;
+	margin: 0 auto;
+}
+.configDiv {
+	width: 22px;
+	height: 22px;
+	border: 1px solid;
+	border-radius: 25px 0px 0px 25px / 25px 0px 0px 25px;
+	margin-right: -2px;
+	position: relative;
+	top: -4px;
+}
+.registImg {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 2px;
+	margin: auto;
+	max-width: 20px;
+	max-height: 20px;
+}
+.configImg {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 2px;
+	margin: auto;
+	max-width: 20px;
+	max-height: 20px;
+}
+.userName {
+	width: 100px;
+	height: 30px;
+	border: 1px solid;
+	text-align: center;
+}
+.historyCalendar {
+	width: 30px;
+	height: 30px;
+	border: 1px solid;
+	text-align: center;
+	vertical-align: middle;
+}
+.feelingHistoryCalendar {
+	width: 30px;
+	height: 30px;
+	border: 1px solid;
+	text-align: center;
+	vertical-align: middle;
+}
+.feelingImg {
+	width: 29px;
+	height: 29px;
+	margin-bottom: -5px;
+}
+
+/* select.html,regist.html,config.html共通の要素 */
+.windowDiv {
+	position: absolute;
+	left: 50%;
+	margin-left: -250px;
+	width: 500px;
+	height: 230px;
+	z-index: 1;
+	background-color: #ffffff;
+	border: 1px solid;
+	border-radius: 25px;
+}
+.windowDiv h2 {
+	text-align: center;
+}
+.failMessage {
+	position: absolute;
+	color: #ffffff;
+	top: 40px;
+	left: 75px;
+	cursor: default;
+}
+.button {
+	font-size: 16px;
+	font-weight: bold;
+	padding: 10px 16px;
+	color: #ffffff;
+	border-style: none;
+    border-radius: 5px;
+
+	box-shadow: 2px 2px 3px 1px #666666;
+	-moz-box-shadow: 2px 2px 3px 1px #666666;
+	-webkit-box-shadow: 2px 2px 3px 1px #666666;
+
+	text-shadow: 1px 1px 2px #000;
+	background-color: #4169E1;
+
+    cursor: pointer;
+}
+
+/* select.html独自のdiv内 */
+#selectedDate {
+	margin-left: 20px;
+}
+.list {
+	position: absolute;
+	top: 120px;
+	left: 39px;
+}
+.check {
+	width: 80px;
+	height: 40px;
+}
+.check input {
+	opacity: 0;
+}
+.label {
+	position: relative;
+	padding-left: 0px;
+}
+.label:hover {
+	content: "";
+	width: 0;
+	height: 0;
+	cursor: pointer;
+}
+#selectCancel {
+	position: absolute;
+	top: 180px;
+	left: 180px;
+	cursor: pointer;
+}
+#deleteFeeling {
+	position: absolute;
+	top: 180px;
+	left: 300px;
+	cursor: pointer;
+}
+#deleteFeeling:disabled{
+	cursor: default;
+}
+
+/* regist.html独自のdiv内 */
+#inputName {
+	position: absolute;
+	top: 85px;
+	left: 75px;
+	font-size: 40px;
+	width: 350px;
+	height: 60px;
+	padding: 5px;
+	border: solid 1px;
+	border-radius: 3px;
+}
+#registerCancel{
+	position: absolute;
+	top: 180px;
+	left: 230px;
+	cursor: pointer;
+}
+#registerUser {
+	position: absolute;
+	top: 180px;
+	left: 380px;
+	cursor: pointer;
+}
+
+/* config.html独自のdiv内 */
+#editName {
+	position: absolute;
+	top: 85px;
+	left: 35px;
+	font-size: 40px;
+	width: 350px;
+	height: 60px;
+	padding: 5px;
+	border: solid 1px;
+	border-radius: 3px;
+}
+#editConfirm {
+	position: absolute;
+	top: 98px;
+	left: 420px;
+	cursor: pointer;
+}
+#editCancel {
+	position: absolute;
+	top: 180px;
+	left: 200px;
+	cursor: pointer;
+}
+#deleteUser {
+	position: absolute;
+	top: 180px;
+	left: 330px;
+	cursor: pointer;
+}

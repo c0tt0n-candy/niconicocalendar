@@ -4,7 +4,7 @@
 <head>
 <title>ニコニコカレンダー</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" type="text/css" href="../css/style.css" />
+<link rel="stylesheet" type="text/css" href="../css/confirmStyle.css" />
 <script th:src="@{../js/jquery/jquery.js}"></script>
 <script type="text/javascript">
 	function editUser() {
@@ -117,7 +117,7 @@
 				</div>
 			</td>
 			<td class="userName" th:text="${user.username}" />
-	 			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer">
+	 			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
 		 				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
 		 						<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
 		  							<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
