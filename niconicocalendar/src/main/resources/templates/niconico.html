@@ -7,6 +7,13 @@
 <link rel="stylesheet" type="text/css" href="../css/style.css" />
 <script th:src="@{../js/jquery/jquery.js}"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+	var checkRed = document.getElementById("getRedirection").value;
+	if(checkRed){
+		location.href="/"
+	}
+});
+
 	function selectFeeling(userId, year, month, day) {
 		var selectForm = document.createElement("form");
 		selectForm.action = "/select";
@@ -129,6 +136,9 @@
 			</td>
 		</tr>
 	</table>
+
+	<!-- ユーザー二重登録防止用 -->
+	<input type="hidden" id="getRedirection" th:value="${redirection}" />
 
 </body>
 </html>
