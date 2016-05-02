@@ -56,7 +56,7 @@ $(document).ready(function(){
 		selectForm.appendChild(selectInput5);
 		selectForm.submit();
 	}
-	
+
 	function deleteFeeling() {
 		var userId = document.getElementById("getUserId").value;
 		var year = document.getElementById("getYear").value;
@@ -94,9 +94,9 @@ $(document).ready(function(){
 	<div id="title">
 		<h1>ニコニコカレンダー</h1>
 	</div>
-	
+
 	<div class="windowDiv">
-		<p id="selectDate" th:text="${dispYear}+'/'+${dispMonth}+'/'+${day}" />
+		<p id="selectedDate" th:text="${dispYear}+'/'+${dispMonth}+'/'+${day}" />
 		<h2>登録内容を選択してください。</h2>
 		<table class="list">
 			<tr>
@@ -122,10 +122,10 @@ $(document).ready(function(){
 				</label></td>
 			</tr>
 		</table>
-		<input class="cancel" type="button" value="キャンセル" onClick="history.back()"/>
-		<input id="deleteFeeling" type="submit" value="登録内容を削除する" onClick="deleteFeeling()" />
+		<input class="button" id="selectCancel" type="button" value="キャンセル" onClick="history.back()"/>
+		<input class="button" id="deleteFeeling" type="submit" value="登録内容を削除する" onClick="deleteFeeling()" />
 	</div>
-	
+
 	<div class="month">
 		<div class="lastmonth">
 			<input type="submit" th:value="＜" />
@@ -135,7 +135,7 @@ $(document).ready(function(){
 			<input type="submit" th:value="＞" />
 		</div>
 	</div>
-	
+
 	<table id="niconicoCalendar">
 		<tr>
 			<td>
@@ -170,6 +170,6 @@ $(document).ready(function(){
 	<input type="hidden" id="getMonth" th:value="${dispMonth}" />
 	<input type="hidden" id="getDay" th:value="${day}" />
 	<input type="hidden" id="getSelectedFeelingId" th:value="${selectedFeelingId}" />
-	
+
 </body>
 </html>

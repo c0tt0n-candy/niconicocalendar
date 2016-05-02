@@ -33,7 +33,7 @@
 		selectForm.appendChild(selectInput4);
 		selectForm.submit();
 	}
-	
+
 	function registerUser(year, month) {
 		var userId = -1;
 		var registerForm = document.createElement("form");
@@ -56,7 +56,7 @@
 		registerForm.appendChild(registerInput3);
 		registerForm.submit();
 	}
-	
+
 	function editUser(userId, year, month) {
 		var editForm = document.createElement("form");
 		editForm.action = "/edit/user";
@@ -101,7 +101,7 @@
 			</form>
 		</div>
 	</div>
-	
+
 	<table id="niconicoCalendar">
 		<tr>
 			<td>
@@ -120,7 +120,7 @@
 				</div>
 			</td>
 			<td class="userName" th:text="${user.username}" />
-	 		<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer" th:onClick="'selectFeeling('+${user.userId}+','+${dispYear}+','+${dispMonth}+','+${i}+')'">
+	 		<td class="historyCalendar" id="feelingHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer" th:onClick="'selectFeeling('+${user.userId}+','+${dispYear}+','+${dispMonth}+','+${i}+')'">
 		 			<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
 		 					<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
 		  						<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
@@ -129,6 +129,6 @@
 			</td>
 		</tr>
 	</table>
-	
+
 </body>
 </html>
