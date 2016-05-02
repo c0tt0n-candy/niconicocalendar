@@ -83,20 +83,20 @@
 }
 .userName {
 	width: 100px;
-	height: 30px;
+	height: 35px;
 	border: 1px solid;
 	text-align: center;
 }
 .historyCalendar {
-	width: 30px;
-	height: 30px;
+	width: 35px;
+	height: 35px;
 	border: 1px solid;
 	text-align: center;
 	vertical-align: middle;
 }
 .feelingHistoryCalendar {
-	width: 30px;
-	height: 30px;
+	width: 35px;
+	height: 35px;
 	border: 1px solid;
 	text-align: center;
 	vertical-align: middle;
@@ -105,7 +105,7 @@
 	background-color: #f5f5f5;
 }
 .feelingImg {
-	width: 29px;
-	height: 29px;
-	margin-bottom: -5px;
+	width: 34px;
+	height: 34px;
+	margin-bottom: -3px;
 }

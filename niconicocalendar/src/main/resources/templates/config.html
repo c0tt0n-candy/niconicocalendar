@@ -117,7 +117,7 @@
 				</div>
 			</td>
 			<td class="userName" th:text="${user.username}" />
-	 			<td class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
+	 			<td class="feelingHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
 		 				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
 		 						<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
 		  							<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
