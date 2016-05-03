@@ -83,7 +83,7 @@
 	<div class="windowDiv">
 		<h2>ユーザー名を変更する</h2>
 		<p class="failMessage">ユーザー名が入力されていません。</p>
-		<input id="editName" type="text" th:value="${username}" maxlength="10" />
+		<input id="editName" type="text" th:value="${userName}" maxlength="10" />
 		<input class="button" id="editConfirm" type="submit" value="OK" onClick="editUser()" />
 		<input class="button" id="editCancel" type="button" value="キャンセル" onClick="history.back()" />
 		<input class="button" id="deleteUser" type="submit" value="ユーザーを削除" onClick="deleteUser()" />
@@ -116,11 +116,11 @@
 					<img class="configImg" th:src="@{/img/config.png}" />
 				</div>
 			</td>
-			<td class="userName" th:text="${user.username}" />
-	 			<td class="feelingHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
-		 				<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
-		 						<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
-		  							<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
+			<td class="userName" th:text="${user.userName}" />
+	 			<td class="feelingsHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
+		 				<th:block th:each="feelingsHistory:${feelingsHistory}" th:if="${feelingsHistory.userId == user.userId and feelingsHistory.day == i}">
+		 						<th:block th:each="feelingsList:${feelingsList}" th:if="${feelingsList.feelingsId == feelingsHistory.feelingsId}">
+		  							<img class="feelingsImg" th:src="@{/img/{feelingsName}.png(feelingsName=${feelingsList.feelings})}" alt="" />
 		 						</th:block>
 		 				</th:block>
 				</td>

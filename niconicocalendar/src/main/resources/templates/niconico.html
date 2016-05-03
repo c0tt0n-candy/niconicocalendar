@@ -14,7 +14,7 @@ $(document).ready(function(){
 	}
 });
 
-	function selectFeeling(userId, year, month, day) {
+	function selectFeelings(userId, year, month, day) {
 		var selectForm = document.createElement("form");
 		selectForm.action = "/select";
 		selectForm.method = "post";
@@ -126,11 +126,11 @@ $(document).ready(function(){
 					<img class="configImg" th:src="@{/img/config.png}" />
 				</div>
 			</td>
-			<td class="userName" th:text="${user.username}" />
-	 		<td class="feelingHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer" th:onClick="'selectFeeling('+${user.userId}+','+${dispYear}+','+${dispMonth}+','+${i}+')'">
-		 			<th:block th:each="feelingHistory:${feelingHistory}" th:if="${feelingHistory.userId == user.userId and feelingHistory.day == i}">
-		 					<th:block th:each="feelings:${feelings}" th:if="${feelings.feelingId == feelingHistory.feelingId}">
-		  						<img class="feelingImg" th:src="@{/img/{feelingName}.png(feelingName=${feelings.feeling})}" alt="" />
+			<td class="userName" th:text="${user.userName}" />
+	 		<td class="feelingsHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer" th:onClick="'selectFeelings('+${user.userId}+','+${dispYear}+','+${dispMonth}+','+${i}+')'">
+		 			<th:block th:each="feelingsHistory:${feelingsHistory}" th:if="${feelingsHistory.userId == user.userId and feelingsHistory.day == i}">
+		 					<th:block th:each="feelingsList:${feelingsList}" th:if="${feelingsList.feelingsId == feelingsHistory.feelingsId}">
+		  						<img class="feelingsImg" th:src="@{/img/{feelingsName}.png(feelingsName=${feelingsList.feelings})}" alt="" />
 		 					</th:block>
 		 			</th:block>
 			</td>

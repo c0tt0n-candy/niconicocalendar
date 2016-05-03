@@ -105,14 +105,14 @@ body {
 	text-align: center;
 	vertical-align: middle;
 }
-.feelingHistoryCalendar {
+.feelingsHistoryCalendar {
 	width: 35px;
 	height: 35px;
 	border: 1px solid;
 	text-align: center;
 	vertical-align: middle;
 }
-.feelingImg {
+.feelingsImg {
 	width: 34px;
 	height: 34px;
 	margin-bottom: -3px;
@@ -208,13 +208,13 @@ body {
 	left: 180px;
 	cursor: pointer;
 }
-#deleteFeeling {
+#deleteFeelings {
 	position: absolute;
 	top: 180px;
 	left: 300px;
 	cursor: pointer;
 }
-#deleteFeeling:disabled{
+#deleteFeelings:disabled{
 	color: #e6e6ff;
 	text-shadow: none;
 	box-shadow:2px 2px 30px -2px #8080ff inset;
