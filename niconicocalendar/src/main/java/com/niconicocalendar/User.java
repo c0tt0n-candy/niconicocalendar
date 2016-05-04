@@ -5,7 +5,9 @@ public class User {
 
 	private int userId;
 	private String userName;
-
+	
+	public User() {}
+	
 	public User(int userId, String userName) {
 		super();
 		this.userId = userId;
