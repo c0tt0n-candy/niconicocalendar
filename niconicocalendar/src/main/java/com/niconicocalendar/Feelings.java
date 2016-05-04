@@ -4,14 +4,17 @@ public class Feelings {
 
 	private int feelingsId;
 	private int userId;
-	private String feelings;
 	private int year;
 	private int month;
 	private int day;
-
-	public Feelings(int feelingsId, String feelings) {
+	private int feelingsNum;
+	private String feelings;
+	
+	public Feelings(){}
+	
+	public Feelings(int feelingsNum, String feelings) {
 		super();
-		this.feelingsId = feelingsId;
+		this.feelingsNum = feelingsNum;
 		this.feelings = feelings;
 	}
 
@@ -20,6 +23,16 @@ public class Feelings {
 		this.userId = userId;
 		this.day = day;
 		this.feelingsId = feelingsId;
+	}
+	
+	public Feelings(int feelingsId, int userId, int year, int month, int day, int feelingsNum) {
+		super();
+		this.feelingsId = feelingsId;
+		this.userId = userId;
+		this.year = year;
+		this.month = month;
+		this.day = day;
+		this.feelingsNum = feelingsNum;
 	}
 
 	public int getFeelingsId() {
@@ -36,14 +49,6 @@ public class Feelings {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
-
-	public String getFeelings() {
-		return feelings;
-	}
-
-	public void setFeelings(String feelings) {
-		this.feelings = feelings;
 	}
 
 	public int getYear() {
@@ -68,5 +73,21 @@ public class Feelings {
 
 	public void setDay(int day) {
 		this.day = day;
+	}
+
+	public int getFeelingsNum() {
+		return feelingsNum;
+	}
+
+	public void setFeelingsNum(int feelingsNum) {
+		this.feelingsNum = feelingsNum;
+	}
+
+	public String getFeelings() {
+		return feelings;
+	}
+
+	public void setFeelings(String feelings) {
+		this.feelings = feelings;
 	}
 }

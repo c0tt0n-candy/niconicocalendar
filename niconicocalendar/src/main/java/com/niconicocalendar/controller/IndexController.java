@@ -41,12 +41,12 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), nowYear, nowMonth);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), nowYear, nowMonth);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
@@ -71,12 +71,12 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), year, month);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), year, month);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		if(userId == -1){
@@ -117,12 +117,12 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), year, month);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), year, month);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		boolean redirection = true;
@@ -153,12 +153,12 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), year, month);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), year, month);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
@@ -191,19 +191,19 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), year, month);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), year, month);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
 	}
 
 	@RequestMapping(value = "/register/feelings")
-	public String registFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("feelingsId") int feelingsId) {
+	public String registFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("feelingsNum") int feelingsNum) {
 
 		// カレンダー取得
 		model.addAttribute("dispYear", year);
@@ -218,11 +218,14 @@ public class IndexController {
 		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
 				Integer.class, userId, year, month, day);
 		if (count == 0) {
-			jdbcTemplate.update("insert into feelings_history_tbl(userId, year, month, day, feelingsId) VALUES (?,?,?,?,?)",
-					userId, year, month, day, feelingsId);
+			int maxFeelingsId = jdbcTemplate.queryForObject("select max(feelingsId) from feelings_history_tbl", Integer.class);
+			jdbcTemplate.update("insert into feelings_history_tbl(feelingsId, userId, year, month, day, feelingsNum) VALUES (?,?,?,?,?,?)",
+					maxFeelingsId+1 ,userId, year, month, day, feelingsNum);
 		} else {
-			jdbcTemplate.update("update feelings_history_tbl set feelingsId=? where userId=? and year=? and month=? and day=?",
-					feelingsId, userId, year, month, day);
+			int feelingsId = jdbcTemplate.queryForObject("select feelingsId from feelings_history_tbl where userId=? and year=? and month=? and day=?",
+					Integer.class, userId, year, month, day);
+			jdbcTemplate.update("update feelings_history_tbl set feelingsNum=? where userId=? and year=? and month=? and day=? and feeingsId=?",
+					feelingsNum, userId, year, month, day, feelingsId);
 		}
 
 		// ユーザーを取得
@@ -232,12 +235,12 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), year, month);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), year, month);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
@@ -266,12 +269,12 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), year, month);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), year, month);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
@@ -296,26 +299,26 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), year, month);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), year, month);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		// 選択日の履歴があれば取得
 		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
 				Integer.class, userId, year, month, day);
-		int selectedFeelingsId = -1;
+		int selectedFeelingsNum = -1;
 		if (count != 0) {
-			selectedFeelingsId = jdbcTemplate.queryForObject("select feelingsId from feelings_history_tbl where userId=? and year=? and month=? and day=?",
+			selectedFeelingsNum = jdbcTemplate.queryForObject("select feelingsNum from feelings_history_tbl where userId=? and year=? and month=? and day=?",
 				Integer.class, userId, year, month, day);
 		}
 
 		model.addAttribute("userId",userId);
 		model.addAttribute("day",day);
-		model.addAttribute("selectedFeelingsId",selectedFeelingsId);
+		model.addAttribute("selectedFeelingsNum",selectedFeelingsNum);
 
 		return "select";
 	}
@@ -345,12 +348,12 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), prevYear, prevMonth);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), prevYear, prevMonth);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
@@ -382,12 +385,12 @@ public class IndexController {
 
 		// Feelingsを取得
 		List<Feelings> feelingsList = jdbcTemplate.query("select * from feelings_tbl",
-				(rs, rowNum) -> new Feelings(rs.getInt("feelingsId"), rs.getString("feelings")));
+				(rs, rowNum) -> new Feelings(rs.getInt("feelingsNum"), rs.getString("feelings")));
 		model.addAttribute("feelingsList", feelingsList);
 
 		// 履歴を取得
-		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsId from feelings_history_tbl where year=? and month=?",
-				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsId")), nextYear, nextMonth);
+		List<Feelings> feelingsHistory = jdbcTemplate.query("select userId, day, feelingsNum from feelings_history_tbl where year=? and month=?",
+				(rs, rowNum) -> new Feelings(rs.getInt("userId"), rs.getInt("day"), rs.getInt("feelingsNum")), nextYear, nextMonth);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
