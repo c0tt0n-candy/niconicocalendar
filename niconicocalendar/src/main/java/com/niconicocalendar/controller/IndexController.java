@@ -71,7 +71,7 @@ public class IndexController {
 			String userName = jdbcTemplate.queryForObject("select userName from user_tbl where userId=?", String.class, userId);
 			model.addAttribute("userName", userName);
 			model.addAttribute("userId", userId);
-			return "config";
+			return "edit";
 		}
 	}
 

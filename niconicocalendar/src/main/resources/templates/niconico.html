@@ -13,78 +13,6 @@ $(document).ready(function(){
 		location.href="/"
 	}
 });
-
-	function selectFeelings(userId, year, month, day) {
-		var selectForm = document.createElement("form");
-		selectForm.action = "/select";
-		selectForm.method = "post";
-		var selectInput1 = document.createElement("input");
-		selectInput1.setAttribute("type", "hidden");
-		selectInput1.setAttribute("name", "userId");
-		selectInput1.setAttribute("value", userId);
-		selectForm.appendChild(selectInput1);
-		var selectInput2 = document.createElement("input");
-		selectInput2.setAttribute("type", "hidden");
-		selectInput2.setAttribute("name", "year");
-		selectInput2.setAttribute("value", year);
-		selectForm.appendChild(selectInput2);
-		var selectInput3 = document.createElement("input");
-		selectInput3.setAttribute("type", "hidden");
-		selectInput3.setAttribute("name", "month");
-		selectInput3.setAttribute("value", month);
-		selectForm.appendChild(selectInput3);
-		var selectInput4 = document.createElement("input");
-		selectInput4.setAttribute("type", "hidden");
-		selectInput4.setAttribute("name", "day");
-		selectInput4.setAttribute("value", day);
-		selectForm.appendChild(selectInput4);
-		selectForm.submit();
-	}
-
-	function registerUser(year, month) {
-		var userId = -1;
-		var registerForm = document.createElement("form");
-		registerForm.action = "/edit/user";
-		registerForm.method = "post";
-		var registerInput1 = document.createElement("input");
-		registerInput1.setAttribute("type", "hidden");
-		registerInput1.setAttribute("name", "userId");
-		registerInput1.setAttribute("value", userId);
-		registerForm.appendChild(registerInput1);
-		var registerInput2 = document.createElement("input");
-		registerInput2.setAttribute("type", "hidden");
-		registerInput2.setAttribute("name", "year");
-		registerInput2.setAttribute("value", year);
-		registerForm.appendChild(registerInput2);
-		var registerInput3 = document.createElement("input");
-		registerInput3.setAttribute("type", "hidden");
-		registerInput3.setAttribute("name", "month");
-		registerInput3.setAttribute("value", month);
-		registerForm.appendChild(registerInput3);
-		registerForm.submit();
-	}
-
-	function editUser(userId, year, month) {
-		var editForm = document.createElement("form");
-		editForm.action = "/edit/user";
-		editForm.method = "post";
-		var editInput1 = document.createElement("input");
-		editInput1.setAttribute("type", "hidden");
-		editInput1.setAttribute("name", "userId");
-		editInput1.setAttribute("value", userId);
-		editForm.appendChild(editInput1);
-		var editInput2 = document.createElement("input");
-		editInput2.setAttribute("type", "hidden");
-		editInput2.setAttribute("name", "year");
-		editInput2.setAttribute("value", year);
-		editForm.appendChild(editInput2);
-		var editInput3 = document.createElement("input");
-		editInput3.setAttribute("type", "hidden");
-		editInput3.setAttribute("name", "month");
-		editInput3.setAttribute("value", month);
-		editForm.appendChild(editInput3);
-		editForm.submit();
-	}
 </script>
 </head>
 
@@ -112,8 +40,13 @@ $(document).ready(function(){
 	<table id="niconicoCalendar">
 		<tr>
 			<td>
-				<div class="configDiv" th:onClick="'registerUser('+${dispYear}+','+${dispMonth}+')'">
-					<img class="registImg" th:src="@{/img/regist.png}" alt="追加" />
+				<div class="configDiv">
+					<form method="post" action="/edit/user">
+						<input type="hidden" name="userId" value="-1" />
+						<input type="hidden" name="year" th:value="${dispYear}" />
+						<input type="hidden" name="month" th:value="${dispMonth}" />
+						<input type="image" th:src="@{/img/regist.png}" alt="追加" class="registImg" />
+					</form>
 				</div>
 			</td>
 			<th class="userName">ユーザー名</th>
@@ -122,17 +55,29 @@ $(document).ready(function(){
 
 		<tr th:each="user:${users}">
 			<td>
-				<div class="configDiv" th:onClick="'editUser('+${user.userId}+','+${dispYear}+','+${dispMonth}+')'">
-					<img class="configImg" th:src="@{/img/config.png}" />
+				<div class="configDiv">
+					<form method="post" action="/edit/user">
+						<input type="hidden" name="userId" th:value="${user.userId}" />
+						<input type="hidden" name="year" th:value="${dispYear}" />
+						<input type="hidden" name="month" th:value="${dispMonth}" />
+						<input type="image" th:src="@{/img/config.png}" alt="編集" class="configImg" />
+					</form>
 				</div>
 			</td>
 			<td class="userName" th:text="${user.userName}" />
-	 		<td class="feelingsHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" style="cursor: pointer" th:onClick="'selectFeelings('+${user.userId}+','+${dispYear}+','+${dispMonth}+','+${i}+')'">
+	 		<td class="feelingsHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
+	 			<form method="post" action="/select">
 		 			<th:block th:each="feelingsHistory:${feelingsHistory}" th:if="${feelingsHistory.userId == user.userId and feelingsHistory.day == i}">
 		 					<th:block th:each="feelingsList:${feelingsList}" th:if="${feelingsList.feelingsNum == feelingsHistory.feelingsNum}">
 		  						<img class="feelingsImg" th:src="@{/img/{feelingsName}.png(feelingsName=${feelingsList.feelings})}" alt="" />
 		 					</th:block>
 		 			</th:block>
+	 				<input type="hidden" name="userId" th:value="${user.userId}" />
+					<input type="hidden" name="year" th:value="${dispYear}" />
+					<input type="hidden" name="month" th:value="${dispMonth}" />
+					<input type="hidden" name="day" th:value="${i}" />
+		 			<input type="submit" value="0" class="linkSelectButton" />
+		 		</form>
 			</td>
 		</tr>
 	</table>
