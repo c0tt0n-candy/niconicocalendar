@@ -31,10 +31,10 @@ public class IndexController {
 		Calendar calendar = Calendar.getInstance();
 		int nowYear = calendar.get(Calendar.YEAR);
 		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-		model.addAttribute("dispYear", nowYear);
-		model.addAttribute("dispMonth", nowMonth);
 		calendar.set(nowYear, nowMonth - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", nowYear);
+		model.addAttribute("dispMonth", nowMonth);
 		model.addAttribute("lastDay", lastDay);
 		
 		List<User> users = userManager.getAllUsers();
@@ -51,11 +51,11 @@ public class IndexController {
 	public String editUser(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
 
 		// カレンダー取得
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
 		List<User> users = userManager.getAllUsers();
