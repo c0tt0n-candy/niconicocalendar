@@ -73,7 +73,7 @@
 			<th class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" th:text="${i}" />
 		</tr>
 
-		<tr th:each="user:${user}">
+		<tr th:each="user:${users}">
 			<td>
 				<div class="configDiv">
 					<img class="configImg" th:src="@{/img/config.png}" />
@@ -82,7 +82,7 @@
 			<td class="userName" th:text="${user.userName}" />
 	 			<td class="feelingsHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
 		 				<th:block th:each="feelingsHistory:${feelingsHistory}" th:if="${feelingsHistory.userId == user.userId and feelingsHistory.day == i}">
-		 						<th:block th:each="feelingsList:${feelingsList}" th:if="${feelingsList.feelingsId == feelingsHistory.feelingsId}">
+		 						<th:block th:each="feelingsList:${feelingsList}" th:if="${feelingsList.feelingsNum == feelingsHistory.feelingsNum}">
 		  							<img class="feelingsImg" th:src="@{/img/{feelingsName}.png(feelingsName=${feelingsList.feelings})}" alt="" />
 		 						</th:block>
 		 				</th:block>

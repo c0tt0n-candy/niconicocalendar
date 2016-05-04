@@ -8,8 +8,8 @@
 <script th:src="@{../js/jquery/jquery.js}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	var feelingsId = document.getElementById("getSelectedFeelingsId").value;
-	if(feelingsId == -1){
+	var feelingsNum = document.getElementById("getSelectedFeelingsNum").value;
+	if(feelingsNum == -1){
 		$("#deleteFeelings").prop("disabled", true);
 	}
 });
@@ -25,7 +25,7 @@ $(document).ready(function(){
 	});
 
 	function selectFeelings(userId, year, month, day) {
-		var feelingsId = $('[name=number]:checked').val();
+		var feelingsNum = $('[name=number]:checked').val();
 		var selectForm = document.createElement("form");
 		selectForm.action = "/register/feelings";
 		selectForm.method = "post";
@@ -51,8 +51,8 @@ $(document).ready(function(){
 		selectForm.appendChild(selectInput4);
 		var selectInput5 = document.createElement("input");
 		selectInput5.setAttribute("type", "hidden");
-		selectInput5.setAttribute("name", "feelingsId");
-		selectInput5.setAttribute("value", feelingsId);
+		selectInput5.setAttribute("name", "feelingsNum");
+		selectInput5.setAttribute("value", feelingsNum);
 		selectForm.appendChild(selectInput5);
 		selectForm.submit();
 	}
@@ -147,7 +147,7 @@ $(document).ready(function(){
 			<th class="historyCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}" th:text="${i}" />
 		</tr>
 
-		<tr th:each="user:${user}">
+		<tr th:each="user:${users}">
 			<td>
 				<div class="configDiv">
 					<img class="configImg" th:src="@{/img/config.png}" />
@@ -156,7 +156,7 @@ $(document).ready(function(){
 			<td class="userName" th:text="${user.userName}" />
 	 			<td class="feelingsHistoryCalendar" th:each="i : ${#numbers.sequence(1,lastDay)}" th:value="${i}">
 		 				<th:block th:each="feelingsHistory:${feelingsHistory}" th:if="${feelingsHistory.userId == user.userId and feelingsHistory.day == i}">
-		 						<th:block th:each="feelingsList:${feelingsList}" th:if="${feelingsList.feelingsId == feelingsHistory.feelingsId}">
+		 						<th:block th:each="feelingsList:${feelingsList}" th:if="${feelingsList.feelingsNum == feelingsHistory.feelingsNum}">
 		  							<img class="feelingsImg" th:src="@{/img/{feelingsName}.png(feelingsName=${feelingsList.feelings})}" alt="" />
 		 						</th:block>
 		 				</th:block>
@@ -169,7 +169,7 @@ $(document).ready(function(){
 	<input type="hidden" id="getYear" th:value="${dispYear}" />
 	<input type="hidden" id="getMonth" th:value="${dispMonth}" />
 	<input type="hidden" id="getDay" th:value="${day}" />
-	<input type="hidden" id="getSelectedFeelingsId" th:value="${selectedFeelingsId}" />
+	<input type="hidden" id="getSelectedFeelingsNum" th:value="${selectedFeelingsNum}" />
 
 </body>
 </html>
