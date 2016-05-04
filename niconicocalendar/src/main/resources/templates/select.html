@@ -125,16 +125,8 @@ $(document).ready(function(){
 		<input class="button" id="selectCancel" type="button" value="キャンセル" onClick="history.back()"/>
 		<input class="button" id="deleteFeelings" type="submit" value="登録内容を削除する" onClick="deleteFeelings()" />
 	</div>
-
-	<div class="month">
-		<div class="lastmonth">
-			<input type="submit" th:value="＜" />
-		</div>
-		<div class="currentmonth" th:text="${dispYear}+年+' '+${dispMonth}+月"></div>
-		<div class="nextmonth">
-			<input type="submit" th:value="＞" />
-		</div>
-	</div>
+	
+	<div class="month"></div>
 
 	<table id="niconicoCalendar">
 		<tr>

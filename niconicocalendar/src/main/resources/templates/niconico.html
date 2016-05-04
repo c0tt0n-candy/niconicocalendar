@@ -6,16 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css/style.css" />
 <script th:src="@{../js/jquery/jquery.js}"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	var checkRed = document.getElementById("getRedirection").value;
-	if(checkRed){
-		location.href="/"
-	}
-});
-</script>
 </head>
-
 <body>
 	<div id="title">
 		<h1>ニコニコカレンダー</h1>
@@ -41,8 +32,7 @@ $(document).ready(function(){
 		<tr>
 			<td>
 				<div class="configDiv">
-					<form method="post" action="/edit/user">
-						<input type="hidden" name="userId" value="-1" />
+					<form method="post" action="/register">
 						<input type="hidden" name="year" th:value="${dispYear}" />
 						<input type="hidden" name="month" th:value="${dispMonth}" />
 						<input type="image" th:src="@{/img/regist.png}" alt="追加" class="registImg" />
@@ -81,9 +71,6 @@ $(document).ready(function(){
 			</td>
 		</tr>
 	</table>
-
-	<!-- ユーザー二重登録防止用 -->
-	<input type="hidden" id="getRedirection" th:value="${redirection}" />
 
 </body>
 </html>

@@ -1,9 +1,14 @@
 
 package com.niconicocalendar;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class User {
 
 	private int userId;
+	@NotNull
+	@Size(min = 1, max = 10)
 	private String userName;
 	
 	public User() {}

@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -46,9 +49,9 @@ public class IndexController {
 
 		return "niconico";
 	}
-
-	@RequestMapping(value = "/edit/user")
-	public String editUser(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
+	
+	@RequestMapping(value = "/register")
+	public String register(@ModelAttribute("user") User user, Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
 
 		// カレンダー取得
 		Calendar calendar = Calendar.getInstance();
@@ -65,34 +68,22 @@ public class IndexController {
 		model.addAttribute("feelingsList", feelingsList);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
-		if(userId == -1){
-			return "regist";
-		}else{
-			String userName = jdbcTemplate.queryForObject("select userName from user_tbl where userId=?", String.class, userId);
-			model.addAttribute("userName", userName);
-			model.addAttribute("userId", userId);
-			return "edit";
-		}
+		return "regist";
 	}
-
+	
 	@RequestMapping(value = "/register/user")
-	public String registerUser(Model model, @RequestParam("name") String name, @RequestParam("year") int year, @RequestParam("month") int month) {
-
-		// ユーザー追加
-		int count = jdbcTemplate.queryForObject("select count(*) from user_tbl", Integer.class);
-		if (count > 0) {
-			int maxUserId = jdbcTemplate.queryForObject("select max(userId) from user_tbl", Integer.class);
-			jdbcTemplate.update("insert into user_tbl(userId, userName) VALUES (?,?)", maxUserId + 1, name);
-		} else {
-			jdbcTemplate.update("insert into user_tbl(userId, userName) VALUES (?,?)", 1, name);
+	public String registerUser(@Validated User user, BindingResult result, Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
+		if(result.hasErrors()) {
+			return register(user, model, year, month);
 		}
+		userManager.registerUser(user);
 
 		// カレンダー取得
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
 		List<User> users = userManager.getAllUsers();
@@ -102,10 +93,28 @@ public class IndexController {
 		model.addAttribute("feelingsList", feelingsList);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
-		boolean redirection = true;
-		model.addAttribute("redirection",redirection);
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value = "/edit/user")
+	public String editUser(User user, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
 
-		return "niconico";
+		// カレンダー取得
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month - 1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
+		model.addAttribute("lastDay", lastDay);
+
+		List<User> users = userManager.getAllUsers();
+		List<Feelings> feelingsList = feelingsManager.getList();
+		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
+		model.addAttribute("users", users);
+		model.addAttribute("feelingsList", feelingsList);
+		model.addAttribute("feelingsHistory", feelingsHistory);
+
+		return "edit";
 	}
 
 	@RequestMapping(value = "/rename/user")
@@ -152,10 +161,10 @@ public class IndexController {
 		model.addAttribute("lastDay", lastDay);
 
 		List<User> users = userManager.getAllUsers();
-		model.addAttribute("users", users);
 		List<Feelings> feelingsList = feelingsManager.getList();
-		model.addAttribute("feelingsList", feelingsList);
 		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
+		model.addAttribute("users", users);
+		model.addAttribute("feelingsList", feelingsList);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
@@ -212,10 +221,10 @@ public class IndexController {
 					userId, year, month, day);
 
 		List<User> users = userManager.getAllUsers();
-		model.addAttribute("users", users);
 		List<Feelings> feelingsList = feelingsManager.getList();
-		model.addAttribute("feelingsList", feelingsList);
 		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
+		model.addAttribute("users", users);
+		model.addAttribute("feelingsList", feelingsList);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";

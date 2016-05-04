@@ -2,43 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>ニコニコカレンダー</title>
+<title>ユーザー登録</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css/confirmStyle.css" />
 <script th:src="@{../js/jquery/jquery.js}"></script>
-<script type="text/javascript">
-	function registerUser() {
-		var str = document.getElementById("inputName").value;
-		if(str == ""){
-			var elements = document.getElementsByClassName("failMessage");
-			elements[0].style.color = "#ff0000";
-		}else{
-			var year = document.getElementById("getYear").value;
-			var month = document.getElementById("getMonth").value;
-			var registerForm = document.createElement("form");
-			registerForm.action = "/register/user";
-			registerForm.method = "post";
-			var registerInput1 = document.createElement("input");
-			registerInput1.setAttribute("type", "hidden");
-			registerInput1.setAttribute("name", "name");
-			registerInput1.setAttribute("value", str);
-			registerForm.appendChild(registerInput1);
-			var registerInput2 = document.createElement("input");
-			registerInput2.setAttribute("type", "hidden");
-			registerInput2.setAttribute("name", "year");
-			registerInput2.setAttribute("value", year);
-			registerForm.appendChild(registerInput2);
-			var registerInput3 = document.createElement("input");
-			registerInput3.setAttribute("type", "hidden");
-			registerInput3.setAttribute("name", "month");
-			registerInput3.setAttribute("value", month);
-			registerForm.appendChild(registerInput3);
-			registerForm.submit();
-		}
-	}
-</script>
 </head>
-
 <body>
 	<div id="title">
 		<h1>ニコニコカレンダー</h1>
@@ -46,21 +14,17 @@
 
 	<div class="windowDiv">
 		<h2>ユーザー名を入力してください。</h2>
-		<p class="failMessage">ユーザー名が入力されていません。</p>
-		<input id="inputName" type="text" value="" maxlength="10" />
-		<input class="button" id="registerCancel" type="button" value="キャンセル" onClick="history.back()"/>
-		<input class="button" id="registerUser" type="submit" value="登録" onClick="registerUser()" />
+		<form method="post" action="/register/user" th:object="${user}">
+			<p th:if="${#fields.hasErrors('userName')}" class="failMessage">ユーザー名が入力されていません。</p>
+			<input id="inputName" type="text" name="userName" value="" maxlength="10" th:field="*{userName}" />
+			<input type="hidden" name="year" th:value="${dispYear}" />
+			<input type="hidden" name="month" th:value="${dispMonth}" />
+			<input class="button" id="registerCancel" type="button" value="キャンセル" onClick="history.back()"/>
+			<input class="button" id="registerUser" type="submit" value="登録" />
+		</form>
 	</div>
-
-	<div class="month">
-		<div class="lastmonth">
-			<input type="submit" th:value="＜" />
-		</div>
-		<div class="currentmonth" th:text="${dispYear}+年+' '+${dispMonth}+月"></div>
-		<div class="nextmonth">
-			<input type="submit" th:value="＞" />
-		</div>
-	</div>
+	
+	<div class="month"></div>
 
 	<table id="niconicoCalendar">
 		<tr>
