@@ -16,19 +16,16 @@ public class UserManager {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
-	//OK
 	public List<User> getAllUsers() {
-		List<User> userList = jdbcTemplate.query("select * from user_tbl", new UserRowMapper());
-		return userList;
+		List<User> users= jdbcTemplate.query("select * from user_tbl", new UserRowMapper());
+		return users;
 	}
 	
-	// OK
 	public User getOneUser(Integer userId) {
 		User user = jdbcTemplate.queryForObject("select * from user_tbl where userId=?", new UserRowMapper(), userId);
 		return user;
 	}
 	
-	// OK
 	public void registerUser(User user) {
 		int count = jdbcTemplate.queryForObject("select count(*) from user_tbl", Integer.class);
 		if (count > 0) {
@@ -40,14 +37,12 @@ public class UserManager {
 		}
 	}
 	
-	// NG
 	public void updateUser(User user) {
 		if (user.getUserName() != "") {
 			jdbcTemplate.update("update user_tbl set userName=? where userId=?", user.getUserName(), user.getUserId());
 		}
 	}
 	
-	// OK
 	public void deleteUser(Integer userId) {
 		jdbcTemplate.update("delete from user_tbl where userId=?", userId);
 		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=?",
