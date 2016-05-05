@@ -28,6 +28,16 @@ public class IndexController {
 	@Autowired
 	FeelingsManager feelingsManager;
 	
+	@ModelAttribute
+	void setModels(Model model) {
+		List<User> users = userManager.getAllUsers();
+		List<Feelings> feelingsList = feelingsManager.getList();
+		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
+		model.addAttribute("users", users);
+		model.addAttribute("feelingsList", feelingsList);
+		model.addAttribute("feelingsHistory", feelingsHistory);
+	}
+	
 	@RequestMapping(value = "/")
 	public String index(Model model) {
 
@@ -41,13 +51,6 @@ public class IndexController {
 		model.addAttribute("dispMonth", nowMonth);
 		model.addAttribute("lastDay", lastDay);
 		
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
-
 		return "niconico";
 	}
 	
@@ -61,13 +64,6 @@ public class IndexController {
 		model.addAttribute("dispYear", year);
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
-
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "regist";
 	}
@@ -87,13 +83,6 @@ public class IndexController {
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
-
 		return "redirect:/";
 	}
 	
@@ -110,12 +99,6 @@ public class IndexController {
 
 		User theUser = userManager.getOneUser(userId);
 		BeanUtils.copyProperties(theUser, user);
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "edit";
 	}
@@ -135,13 +118,6 @@ public class IndexController {
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
-
 		return "redirect:/";
 	}
 
@@ -158,13 +134,6 @@ public class IndexController {
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
-
 		return "redirect:/";
 	}
 	
@@ -178,13 +147,6 @@ public class IndexController {
 		model.addAttribute("dispYear", year);
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
-
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		Feelings selectedFeelings = feelingsManager.findFeelings(userId, year, month, day);
 		int selectedFeelingsId = 0;
@@ -209,13 +171,6 @@ public class IndexController {
 
 		feelingsManager.registerFeelings(feelings);		
 
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
-
 		return "redirect:/";
 	}
 
@@ -231,13 +186,6 @@ public class IndexController {
 		model.addAttribute("lastDay", lastDay);
 		
 		feelingsManager.deleteFeelings(feelingsId);
-		
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "redirect:/";
 	}
@@ -260,13 +208,6 @@ public class IndexController {
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
 		model.addAttribute("lastDay", lastDay);
 
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
-
 		return "niconico";
 	}
 
@@ -276,7 +217,7 @@ public class IndexController {
 
 		int nextYear = Integer.parseInt(Next[0]);
 		int nextMonth = Integer.parseInt(Next[1]);
-		if(nextMonth == 13){
+		if(nextMonth == 13){	
 			nextYear += 1;
 			nextMonth = 1;
 		}
@@ -288,13 +229,6 @@ public class IndexController {
 		calendar.set(nextYear, nextMonth - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
 		model.addAttribute("lastDay", lastDay);
-
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "niconico";
 	}
