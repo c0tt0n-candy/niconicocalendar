@@ -132,7 +132,7 @@ body {
 }
 .list {
 	position: absolute;
-	top: 105px;
+	top: 100px;
 	left: 30px;
 }
 .check {
@@ -175,13 +175,13 @@ body {
 }
 #selectCancel {
 	position: absolute;
-	top: 180px;
-	left: 180px;
+	top: 170px;
+	left: 170px;
 	cursor: pointer;
 }
 #deleteFeelings {
 	position: absolute;
-	top: 180px;
+	top: 170px;
 	left: 300px;
 	cursor: pointer;
 }
@@ -208,14 +208,14 @@ body {
 }
 #registerCancel{
 	position: absolute;
-	top: 180px;
-	left: 230px;
+	top: 170px;
+	left: 245px;
 	cursor: pointer;
 }
 #registerUser {
 	position: absolute;
-	top: 180px;
-	left: 380px;
+	top: 170px;
+	left: 375px;
 	cursor: pointer;
 }
 
@@ -239,13 +239,13 @@ body {
 }
 #editCancel {
 	position: absolute;
-	top: 180px;
+	top: 170px;
 	left: 200px;
 	cursor: pointer;
 }
 #deleteUser {
 	position: absolute;
-	top: 180px;
+	top: 170px;
 	left: 330px;
 	cursor: pointer;
 }
