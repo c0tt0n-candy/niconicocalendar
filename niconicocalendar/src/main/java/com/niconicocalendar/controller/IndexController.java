@@ -3,6 +3,7 @@ package com.niconicocalendar.controller;
 import java.util.Calendar;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -97,7 +98,7 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value = "/edit/user")
-	public String editUser(User user, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
+	public String editUser(@ModelAttribute("user") User user, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
 
 		// カレンダー取得
 		Calendar calendar = Calendar.getInstance();
@@ -107,6 +108,8 @@ public class IndexController {
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
+		User theUser = userManager.getOneUser(userId);
+		BeanUtils.copyProperties(theUser, user);
 		List<User> users = userManager.getAllUsers();
 		List<Feelings> feelingsList = feelingsManager.getList();
 		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
@@ -118,17 +121,18 @@ public class IndexController {
 	}
 
 	@RequestMapping(value = "/rename/user")
-	public String renameUser(Model model, @RequestParam("userId") int userId, @RequestParam("name") String name, @RequestParam("year") int year, @RequestParam("month") int month) {
-
-		// ユーザー名変更
-		jdbcTemplate.update("update user_tbl set userName=? where userId=?", name, userId);
-
+	public String renameUser(@Validated User user, BindingResult result, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
+		if(result.hasErrors()) {
+			return editUser(user, model, userId, year, month);
+		}
+		userManager.updateUser(user);
+		
 		// カレンダー取得
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
 		List<User> users = userManager.getAllUsers();
@@ -138,26 +142,20 @@ public class IndexController {
 		model.addAttribute("feelingsList", feelingsList);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
-		return "niconico";
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/delete/user")
 	public String deleteUser(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
 
-		// ユーザー削除
-		jdbcTemplate.update("delete from user_tbl where userId=?", userId);
-		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=?",
-				Integer.class, userId);
-		if (count>0){
-			jdbcTemplate.update("delete from feelings_history_tbl where userId=?", userId);
-		}
+		userManager.deleteUser(userId);
 
 		// カレンダー取得
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
 		List<User> users = userManager.getAllUsers();
@@ -167,9 +165,9 @@ public class IndexController {
 		model.addAttribute("feelingsList", feelingsList);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
-		return "niconico";
+		return "redirect:/";
 	}
-
+	
 	@RequestMapping(value = "/register/feelings")
 	public String registerFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("feelingsNum") int feelingsNum) {
 
