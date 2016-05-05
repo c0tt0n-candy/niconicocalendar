@@ -22,10 +22,15 @@ public class FeelingsManager {
 		return feelingsList;
 	}
 	
-	// 余計なの含む
+	// 余計なの含む いらないかも
 	public List<Feelings> getAllFeelings() {
 		List<Feelings> allFeelings = jdbcTemplate.query("select feelingsId, userId, year, month, day, feelingsNum from feelings_history_tbl", new FeelingsRowMapper());
 		return allFeelings;
+	}
+	
+	public List<Feelings> getAllThisPeriodFeelings(Integer year, Integer month) {
+		List<Feelings> allThisPeriodFeelings = jdbcTemplate.query("select feelingsId, userId, year, month, day, feelingsNum from feelings_history_tbl where year=? and month=?", new FeelingsRowMapper(), year, month);
+		return allThisPeriodFeelings;		
 	}
 	
 	// 余計なの含む いらないかも

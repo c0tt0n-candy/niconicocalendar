@@ -17,8 +17,8 @@
 		<form method="post" action="/register/user" th:object="${user}">
 			<p th:if="${#fields.hasErrors('userName')}" class="failMessage">ユーザー名が入力されていません。</p>
 			<input id="inputName" type="text" name="userName" value="" maxlength="10" th:field="*{userName}" />
-			<input type="hidden" name="year" th:value="${dispYear}" />
-			<input type="hidden" name="month" th:value="${dispMonth}" />
+			<input type="hidden" name="year" th:value="${param.year[0]}" />
+			<input type="hidden" name="month" th:value="${param.month[0]}" />
 			<input class="button" id="registerCancel" type="button" value="キャンセル" onClick="history.back()"/>
 			<input class="button" id="registerUser" type="submit" value="登録" />
 		</form>
@@ -53,10 +53,5 @@
 				</td>
 		</tr>
 	</table>
-
-	<!-- 各種情報を受け取り -->
-	<input type="hidden" id="getYear" th:value="${dispYear}" />
-	<input type="hidden" id="getMonth" th:value="${dispMonth}" />
-
 </body>
 </html>

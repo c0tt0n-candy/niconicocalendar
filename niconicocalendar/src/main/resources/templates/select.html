@@ -28,7 +28,7 @@ $(document).ready(function(){
 	</div>
 
 	<div class="windowDiv">
-		<p id="selectedDate" th:text="${dispYear}+'/'+${dispMonth}+'/'+${param.day[0]}" />
+		<p id="selectedDate" th:text="${param.year[0]}+'/'+${param.month[0]}+'/'+${param.day[0]}" />
 		<h2>登録内容を選択してください。</h2>
 		<form method="post" action="/register/feelings" th:object="${feelings}" id="selectFeelingsForm">
 			<table class="list">
@@ -56,15 +56,15 @@ $(document).ready(function(){
 				</tr>
 			</table>
 			<input type="hidden" name="userId" th:value="*{userId}" />
-			<input type="hidden" name="year" th:value="${dispYear}" />
-			<input type="hidden" name="month" th:value="${dispMonth}" />
+			<input type="hidden" name="year" th:value="${param.year[0]}" />
+			<input type="hidden" name="month" th:value="${param.month[0]}" />
 			<input type="hidden" name="day" th:value="*{day}" />
 		</form>
 		<input class="button" id="selectCancel" type="button" value="キャンセル" onClick="history.back()"/>
 		<form method="post" action="delete/feelings">
 			<input type="hidden" name="feelingsId" th:value="${selectedFeelingsId}" />
-			<input type="hidden" name="year" th:value="${dispYear}" />
-			<input type="hidden" name="month" th:value="${dispMonth}" />
+			<input type="hidden" name="year" th:value="${param.year[0]}" />
+			<input type="hidden" name="month" th:value="${param.month[0]}" />
 			<input class="button" id="deleteFeelings" type="submit" value="登録内容を削除する" />
 		</form>
 	</div>

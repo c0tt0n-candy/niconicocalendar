@@ -18,15 +18,15 @@
 			<p th:if="${#fields.hasErrors('userName')}" class="failMessage">ユーザー名が入力されていません。</p>
 			<input id="editName" type="text" name="userName" maxlength="10" th:field="*{userName}" />
 			<input type="hidden" name="userId" th:value="*{userId}"/>
-			<input type="hidden" name="year" th:value="${dispYear}" />
-			<input type="hidden" name="month" th:value="${dispMonth}" />
+			<input type="hidden" name="year" th:value="${param.year[0]}" />
+			<input type="hidden" name="month" th:value="${param.month[0]}" />
 			<input class="button" id="editConfirm" type="submit" value="OK"/>
 		</form>
 			<input class="button" id="editCancel" type="button" value="キャンセル" onClick="history.back()" />
 		<form method="post" action="/delete/user">
 			<input type="hidden" name="userId" th:value="${user.userId}" />
-			<input type="hidden" name="year" th:value="${dispYear}" />
-			<input type="hidden" name="month" th:value="${dispMonth}" />
+			<input type="hidden" name="year" th:value="${param.year[0]}" />
+			<input type="hidden" name="month" th:value="${param.month[0]}" />
 			<input class="button" id="deleteUser" type="submit" value="ユーザーを削除" />
 		</form>
 	</div>
@@ -60,10 +60,5 @@
 				</td>
 		</tr>
 	</table>
-
-	<!-- 各種情報を受け取り -->
-	<input type="hidden" id="getYear" th:value="${dispYear}" />
-	<input type="hidden" id="getMonth" th:value="${dispMonth}" />
-
 </body>
 </html>

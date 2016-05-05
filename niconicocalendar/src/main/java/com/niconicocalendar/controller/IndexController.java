@@ -18,6 +18,7 @@ import com.niconicocalendar.Feelings;
 import com.niconicocalendar.User;
 import com.niconicocalendar.model.FeelingsManager;
 import com.niconicocalendar.model.UserManager;
+import com.niconicocalendar.model.getCalendar;
 
 @Controller
 public class IndexController {
@@ -29,41 +30,36 @@ public class IndexController {
 	FeelingsManager feelingsManager;
 	
 	@ModelAttribute
-	void setModels(Model model) {
+	void setModels(Model model) {		
 		List<User> users = userManager.getAllUsers();
 		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
+
 		model.addAttribute("users", users);
 		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
 	}
 	
 	@RequestMapping(value = "/")
 	public String index(Model model) {
+		int dispYear = getCalendar.getDispYear();
+		int dispMonth = getCalendar.getDispMonth();
+		int lastDay = getCalendar.getLastDay(dispYear, dispMonth);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(dispYear, dispMonth);
 
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		int nowYear = calendar.get(Calendar.YEAR);
-		int nowMonth = calendar.get(Calendar.MONTH) + 1;
-		calendar.set(nowYear, nowMonth - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
-		model.addAttribute("dispYear", nowYear);
-		model.addAttribute("dispMonth", nowMonth);
+		model.addAttribute("dispYear", dispYear);
+		model.addAttribute("dispMonth", dispMonth);
 		model.addAttribute("lastDay", lastDay);
-		
+		model.addAttribute("feelingsHistory", feelingsHistory);
+
 		return "niconico";
 	}
 	
 	@RequestMapping(value = "/register")
 	public String register(@ModelAttribute("user") User user, Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
+		int lastDay = getCalendar.getLastDay(year, month);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(year, month);
 
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
+		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "regist";
 	}
@@ -75,27 +71,24 @@ public class IndexController {
 		}
 		userManager.registerUser(user);
 
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		int lastDay = getCalendar.getLastDay(year, month);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(year, month);
+
 		model.addAttribute("dispYear", year);
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
+		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "redirect:/";
 	}
 	
 	@RequestMapping(value = "/edit/user")
 	public String editUser(@ModelAttribute("user") User user, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
+		int lastDay = getCalendar.getLastDay(year, month);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(year, month);
 
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
+		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		User theUser = userManager.getOneUser(userId);
 		BeanUtils.copyProperties(theUser, user);
@@ -109,44 +102,40 @@ public class IndexController {
 			return editUser(user, model, userId, year, month);
 		}
 		userManager.updateUser(user);
-		
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+
+		int lastDay = getCalendar.getLastDay(year, month);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(year, month);
+
 		model.addAttribute("dispYear", year);
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
+		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/delete/user")
 	public String deleteUser(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
-
 		userManager.deleteUser(userId);
 
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		int lastDay = getCalendar.getLastDay(year, month);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(year, month);
+
 		model.addAttribute("dispYear", year);
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
+		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "redirect:/";
 	}
 	
 	@RequestMapping(value = "/select")
 	public String selectFeelings(@ModelAttribute("feelings") Feelings feelings, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
+		int lastDay = getCalendar.getLastDay(year, month);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(year, month);
 
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
+		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		Feelings selectedFeelings = feelingsManager.findFeelings(userId, year, month, day);
 		int selectedFeelingsId = 0;
@@ -159,32 +148,29 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value = "/register/feelings")
-	public String registerFeelings(Feelings feelings, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
+	public String registerFeelings(Feelings feelings, Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
+		feelingsManager.registerFeelings(feelings);
 
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		int lastDay = getCalendar.getLastDay(year, month);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(year, month);
+
 		model.addAttribute("dispYear", year);
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
-
-		feelingsManager.registerFeelings(feelings);		
+		model.addAttribute("feelingsHistory", feelingsHistory);
 
 		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/delete/feelings")
 	public String deleteFeelings(Model model, @RequestParam("feelingsId") int feelingsId, @RequestParam("year") int year, @RequestParam("month") int month) {
+		int lastDay = getCalendar.getLastDay(year, month);
+		List<Feelings> feelingsHistory = feelingsManager.getAllThisPeriodFeelings(year, month);
 
-		// カレンダー取得
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
 		model.addAttribute("dispYear", year);
 		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
-		
+		model.addAttribute("feelingsHistory", feelingsHistory);
 		feelingsManager.deleteFeelings(feelingsId);
 
 		return "redirect:/";
@@ -202,7 +188,6 @@ public class IndexController {
 		model.addAttribute("dispYear",prevYear);
 		model.addAttribute("dispMonth",prevMonth);
 
-		// カレンダー取得
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(prevYear, prevMonth - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
@@ -224,7 +209,6 @@ public class IndexController {
 		model.addAttribute("dispYear",nextYear);
 		model.addAttribute("dispMonth",nextMonth);
 
-		// カレンダー取得
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(nextYear, nextMonth - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
