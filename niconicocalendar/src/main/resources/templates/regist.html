@@ -6,6 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css/confirmStyle.css" />
 <script th:src="@{../js/jquery/jquery.js}"></script>
+<script type="text/javascript">
+	function goToTop() {
+		location.href = "/"
+	}
+</script>
 </head>
 <body>
 	<div id="title">
@@ -19,7 +24,7 @@
 			<input id="inputName" type="text" name="userName" value="" maxlength="10" th:field="*{userName}" />
 			<input type="hidden" name="year" th:value="${param.year[0]}" />
 			<input type="hidden" name="month" th:value="${param.month[0]}" />
-			<input class="button" id="registerCancel" type="button" value="キャンセル" onClick="history.back()"/>
+			<input class="button" id="registerCancel" type="button" value="キャンセル" onClick="goToTop()" />
 			<input class="button" id="registerUser" type="submit" value="登録" />
 		</form>
 	</div>

@@ -6,6 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css/confirmStyle.css" />
 <script th:src="@{../js/jquery/jquery.js}"></script>
+<script type="text/javascript">
+	function goToTop() {
+		location.href = "/"
+	}
+</script>
 </head>
 <body>
 	<div id="title">
@@ -22,7 +27,7 @@
 			<input type="hidden" name="month" th:value="${param.month[0]}" />
 			<input class="button" id="editConfirm" type="submit" value="OK"/>
 		</form>
-			<input class="button" id="editCancel" type="button" value="キャンセル" onClick="history.back()" />
+			<input class="button" id="editCancel" type="button" value="キャンセル" onClick="goToTop()" />
 		<form method="post" action="/delete/user">
 			<input type="hidden" name="userId" th:value="${user.userId}" />
 			<input type="hidden" name="year" th:value="${param.year[0]}" />
