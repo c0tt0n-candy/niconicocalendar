@@ -48,13 +48,6 @@ public class FeelingsController {
 		feelingsManager.registerFeelings(feelings);
 	}
 	
-	// Feelings1件更新
-//	@RequestMapping(value = "{feelingsId}", method = RequestMethod.POST)
-//	void update(@PathVariable Integer feelingsId, @RequestBody Feelings feelings) {
-//		feelings.setFeelingsId(feelingsId);
-//		feelingsManager.updateFeelings(feelings);
-//	}
-	
 	// Feelings1件削除	
 	@RequestMapping(value = "{feelingsId}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)

@@ -1,6 +1,5 @@
 package com.niconicocalendar.controller;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -177,43 +176,32 @@ public class IndexController {
 	}
 
 	@RequestMapping(value = "/previous")
-	public String getPrevious(Model model, @RequestParam("previous") String previous) {
-		String[] prev = previous.split("/");
-		int prevYear = Integer.parseInt(prev[0]);
-		int prevMonth = Integer.parseInt(prev[1]);
-		if(prevMonth == 0){
-			prevYear -= 1;
-			prevMonth = 12;
+	public String getPrevious(Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
+		if(month == 0){
+			year -= 1;
+			month = 12;
 		}
-		model.addAttribute("dispYear",prevYear);
-		model.addAttribute("dispMonth",prevMonth);
+		int lastDay = getCalendar.getLastDay(year, month);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(prevYear, prevMonth - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
-		return "niconico";
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/next")
-	public String getNext(Model model, @RequestParam("next") String next) {
-		String[] Next = next.split("/");
-
-		int nextYear = Integer.parseInt(Next[0]);
-		int nextMonth = Integer.parseInt(Next[1]);
-		if(nextMonth == 13){	
-			nextYear += 1;
-			nextMonth = 1;
+	public String getNext(Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
+		if(month == 13){	
+			year += 1;
+			month = 1;
 		}
-		model.addAttribute("dispYear",nextYear);
-		model.addAttribute("dispMonth",nextMonth);
+		int lastDay = getCalendar.getLastDay(year, month);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(nextYear, nextMonth - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
 
-		return "niconico";
+		return "redirect:/";
 	}
 }
