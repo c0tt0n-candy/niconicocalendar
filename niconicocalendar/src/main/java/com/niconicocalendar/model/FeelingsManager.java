@@ -28,10 +28,21 @@ public class FeelingsManager {
 		return allFeelings;
 	}
 	
-	// 余計なの含む
+	// 余計なの含む いらないかも
 	public Feelings getOneFeelings(Integer feelingsId) {
 		Feelings oneFeelings = jdbcTemplate.queryForObject("select * from feelings_history_tbl where feelingsId=?", new FeelingsRowMapper(), feelingsId);
 		return oneFeelings;
+	}
+	
+	public Feelings findFeelings(Integer userId, Integer year, Integer month, Integer day) {
+		Feelings selectedFeelings = null;
+		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
+				Integer.class, userId, year, month, day);
+		if (count != 0) {
+			selectedFeelings = jdbcTemplate.queryForObject("select feelingsId, userId, year, month, day, feelingsNum from feelings_history_tbl where userId=? and year=? and month=? and day=?",
+				new FeelingsRowMapper(), userId, year, month, day);
+		}
+		return selectedFeelings;
 	}
 	
 	public void registerFeelings(Feelings feelings) {

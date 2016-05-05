@@ -168,30 +168,16 @@ public class IndexController {
 		return "redirect:/";
 	}
 	
-	@RequestMapping(value = "/register/feelings")
-	public String registerFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("feelingsNum") int feelingsNum) {
+	@RequestMapping(value = "/select")
+	public String selectFeelings(@ModelAttribute("feelings") Feelings feelings, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
 
 		// カレンダー取得
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
-
-		// ニコニコ登録
-		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
-				Integer.class, userId, year, month, day);
-		if (count == 0) {
-			int maxFeelingsId = jdbcTemplate.queryForObject("select max(feelingsId) from feelings_history_tbl", Integer.class);
-			jdbcTemplate.update("insert into feelings_history_tbl(feelingsId, userId, year, month, day, feelingsNum) VALUES (?,?,?,?,?,?)",
-					maxFeelingsId+1 ,userId, year, month, day, feelingsNum);
-		} else {
-			int feelingsId = jdbcTemplate.queryForObject("select feelingsId from feelings_history_tbl where userId=? and year=? and month=? and day=?",
-					Integer.class, userId, year, month, day);
-			jdbcTemplate.update("update feelings_history_tbl set feelingsNum=? where feelingsId=?",
-					feelingsNum, feelingsId);
-		}
 
 		List<User> users = userManager.getAllUsers();
 		List<Feelings> feelingsList = feelingsManager.getList();
@@ -200,24 +186,52 @@ public class IndexController {
 		model.addAttribute("feelingsList", feelingsList);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
-		return "niconico";
+		Feelings selectedFeelings = feelingsManager.findFeelings(userId, year, month, day);
+		int selectedFeelingsId = 0;
+		if(selectedFeelings != null) {
+			selectedFeelingsId = selectedFeelings.getFeelingsId();
+		}
+		model.addAttribute("selectedFeelingsId",selectedFeelingsId);
+
+		return "select";
+	}
+	
+	@RequestMapping(value = "/register/feelings")
+	public String registerFeelings(Feelings feelings, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
+
+		// カレンダー取得
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month - 1, 1);
+		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
+		model.addAttribute("lastDay", lastDay);
+
+		feelingsManager.registerFeelings(feelings);		
+
+		List<User> users = userManager.getAllUsers();
+		List<Feelings> feelingsList = feelingsManager.getList();
+		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
+		model.addAttribute("users", users);
+		model.addAttribute("feelingsList", feelingsList);
+		model.addAttribute("feelingsHistory", feelingsHistory);
+
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/delete/feelings")
-	public String deleteFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
+	public String deleteFeelings(Model model, @RequestParam("feelingsId") int feelingsId, @RequestParam("year") int year, @RequestParam("month") int month) {
 
 		// カレンダー取得
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month - 1, 1);
 		int lastDay = calendar.getActualMaximum(Calendar.DATE);
+		model.addAttribute("dispYear", year);
+		model.addAttribute("dispMonth", month);
 		model.addAttribute("lastDay", lastDay);
-
-		// ニコニコ削除
-		jdbcTemplate.update("delete from feelings_history_tbl where userId=? and year=? and month=? and day=?",
-					userId, year, month, day);
-
+		
+		feelingsManager.deleteFeelings(feelingsId);
+		
 		List<User> users = userManager.getAllUsers();
 		List<Feelings> feelingsList = feelingsManager.getList();
 		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
@@ -225,41 +239,7 @@ public class IndexController {
 		model.addAttribute("feelingsList", feelingsList);
 		model.addAttribute("feelingsHistory", feelingsHistory);
 
-		return "niconico";
-	}
-
-	@RequestMapping(value = "/select")
-	public String selectFeelings(Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
-
-		// カレンダー取得
-		model.addAttribute("dispYear", year);
-		model.addAttribute("dispMonth", month);
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month - 1, 1);
-		int lastDay = calendar.getActualMaximum(Calendar.DATE);
-		model.addAttribute("lastDay", lastDay);
-
-		List<User> users = userManager.getAllUsers();
-		List<Feelings> feelingsList = feelingsManager.getList();
-		List<Feelings> feelingsHistory = feelingsManager.getAllFeelings();
-		model.addAttribute("users", users);
-		model.addAttribute("feelingsList", feelingsList);
-		model.addAttribute("feelingsHistory", feelingsHistory);
-
-		// 選択日の履歴があれば取得
-		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
-				Integer.class, userId, year, month, day);
-		int selectedFeelingsNum = -1;
-		if (count != 0) {
-			selectedFeelingsNum = jdbcTemplate.queryForObject("select feelingsNum from feelings_history_tbl where userId=? and year=? and month=? and day=?",
-				Integer.class, userId, year, month, day);
-		}
-
-		model.addAttribute("userId",userId);
-		model.addAttribute("day",day);
-		model.addAttribute("selectedFeelingsNum",selectedFeelingsNum);
-
-		return "select";
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/previous")

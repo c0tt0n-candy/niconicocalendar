@@ -8,85 +8,17 @@
 <script th:src="@{../js/jquery/jquery.js}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	var feelingsNum = document.getElementById("getSelectedFeelingsNum").value;
-	if(feelingsNum == -1){
+	var selectedFeelingsId = document.getElementById("getSelectedFeelingsId").value;
+	if(selectedFeelingsId == 0){
 		$("#deleteFeelings").prop("disabled", true);
 	}
 });
 
 	$(function() {
-		$("input[name='number']").change(function() {
-			var userId = document.getElementById("getUserId").value;
-			var year = document.getElementById("getYear").value;
-			var month = document.getElementById("getMonth").value;
-			var day = document.getElementById("getDay").value;
-			selectFeelings(userId, year, month, day);
+		$("input[name='feelingsNum']").change(function() {
+			$("#selectFeelingsForm").submit();
 		});
 	});
-
-	function selectFeelings(userId, year, month, day) {
-		var feelingsNum = $('[name=number]:checked').val();
-		var selectForm = document.createElement("form");
-		selectForm.action = "/register/feelings";
-		selectForm.method = "post";
-		var selectInput1 = document.createElement("input");
-		selectInput1.setAttribute("type", "hidden");
-		selectInput1.setAttribute("name", "userId");
-		selectInput1.setAttribute("value", userId);
-		selectForm.appendChild(selectInput1);
-		var selectInput2 = document.createElement("input");
-		selectInput2.setAttribute("type", "hidden");
-		selectInput2.setAttribute("name", "year");
-		selectInput2.setAttribute("value", year);
-		selectForm.appendChild(selectInput2);
-		var selectInput3 = document.createElement("input");
-		selectInput3.setAttribute("type", "hidden");
-		selectInput3.setAttribute("name", "month");
-		selectInput3.setAttribute("value", month);
-		selectForm.appendChild(selectInput3);
-		var selectInput4 = document.createElement("input");
-		selectInput4.setAttribute("type", "hidden");
-		selectInput4.setAttribute("name", "day");
-		selectInput4.setAttribute("value", day);
-		selectForm.appendChild(selectInput4);
-		var selectInput5 = document.createElement("input");
-		selectInput5.setAttribute("type", "hidden");
-		selectInput5.setAttribute("name", "feelingsNum");
-		selectInput5.setAttribute("value", feelingsNum);
-		selectForm.appendChild(selectInput5);
-		selectForm.submit();
-	}
-
-	function deleteFeelings() {
-		var userId = document.getElementById("getUserId").value;
-		var year = document.getElementById("getYear").value;
-		var month = document.getElementById("getMonth").value;
-		var day = document.getElementById("getDay").value;
-		var selectForm = document.createElement("form");
-		selectForm.action = "/delete/feelings";
-		selectForm.method = "post";
-		var selectInput1 = document.createElement("input");
-		selectInput1.setAttribute("type", "hidden");
-		selectInput1.setAttribute("name", "userId");
-		selectInput1.setAttribute("value", userId);
-		selectForm.appendChild(selectInput1);
-		var selectInput2 = document.createElement("input");
-		selectInput2.setAttribute("type", "hidden");
-		selectInput2.setAttribute("name", "year");
-		selectInput2.setAttribute("value", year);
-		selectForm.appendChild(selectInput2);
-		var selectInput3 = document.createElement("input");
-		selectInput3.setAttribute("type", "hidden");
-		selectInput3.setAttribute("name", "month");
-		selectInput3.setAttribute("value", month);
-		selectForm.appendChild(selectInput3);
-		var selectInput4 = document.createElement("input");
-		selectInput4.setAttribute("type", "hidden");
-		selectInput4.setAttribute("name", "day");
-		selectInput4.setAttribute("value", day);
-		selectForm.appendChild(selectInput4);
-		selectForm.submit();
-	}
 </script>
 </head>
 
@@ -96,34 +28,45 @@ $(document).ready(function(){
 	</div>
 
 	<div class="windowDiv">
-		<p id="selectedDate" th:text="${dispYear}+'/'+${dispMonth}+'/'+${day}" />
+		<p id="selectedDate" th:text="${dispYear}+'/'+${dispMonth}+'/'+${param.day[0]}" />
 		<h2>登録内容を選択してください。</h2>
-		<table class="list">
-			<tr>
-				<td class="check"><input type="radio" name="number" value="0" id="radio1" />
-				<label class="label" for="radio1">
-					<img th:src="@{/img/niconico.png}" alt="niconico" />
-				</label></td>
-				<td class="check"><input type="radio" name="number" value="1" id="radio2" />
-				<label class="label" for="radio2">
-					<img th:src="@{/img/iraira.png}" alt="iraira" />
-				</label></td>
-				<td class="check"><input type="radio" name="number" value="2" id="radio3" />
-				<label class="label" for="radio3">
-					<img th:src="@{/img/futsu.png}" alt="futsu" />
-				</label></td>
-				<td class="check"><input type="radio" name="number" value="3" id="radio4" />
-				<label class="label" for="radio4">
-					<img th:src="@{/img/shikushiku.png}" alt="shikushiku" />
-				</label></td>
-				<td class="check"><input type="radio" name="number" value="4" id="radio5" />
-				<label class="label" for="radio5">
-					<img th:src="@{/img/utouto.png}" alt="utouto" />
-				</label></td>
-			</tr>
-		</table>
+		<form method="post" action="/register/feelings" th:object="${feelings}" id="selectFeelingsForm">
+			<table class="list">
+				<tr>
+					<td class="check"><input type="radio" name="feelingsNum" value="1" id="radio1" th:field="*{feelingsNum}" />
+					<label class="label" for="radio1">
+						<img th:src="@{/img/niconico.png}" alt="niconico" />
+					</label></td>
+					<td class="check"><input type="radio" name="feelingsNum" value="2" id="radio2" th:field="*{feelingsNum}" />
+					<label class="label" for="radio2">
+						<img th:src="@{/img/iraira.png}" alt="iraira" />
+					</label></td>
+					<td class="check"><input type="radio" name="feelingsNum" value="3" id="radio3" th:field="*{feelingsNum}" />
+					<label class="label" for="radio3">
+						<img th:src="@{/img/futsu.png}" alt="futsu" />
+					</label></td>
+					<td class="check"><input type="radio" name="feelingsNum" value="4" id="radio4" th:field="*{feelingsNum}" />
+					<label class="label" for="radio4">
+						<img th:src="@{/img/shikushiku.png}" alt="shikushiku" />
+					</label></td>
+					<td class="check"><input type="radio" name="feelingsNum" value="5" id="radio5" th:field="*{feelingsNum}" />
+					<label class="label" for="radio5">
+						<img th:src="@{/img/utouto.png}" alt="utouto" />
+					</label></td>
+				</tr>
+			</table>
+			<input type="hidden" name="userId" th:value="*{userId}" />
+			<input type="hidden" name="year" th:value="${dispYear}" />
+			<input type="hidden" name="month" th:value="${dispMonth}" />
+			<input type="hidden" name="day" th:value="*{day}" />
+		</form>
 		<input class="button" id="selectCancel" type="button" value="キャンセル" onClick="history.back()"/>
-		<input class="button" id="deleteFeelings" type="submit" value="登録内容を削除する" onClick="deleteFeelings()" />
+		<form method="post" action="delete/feelings">
+			<input type="hidden" name="feelingsId" th:value="${selectedFeelingsId}" />
+			<input type="hidden" name="year" th:value="${dispYear}" />
+			<input type="hidden" name="month" th:value="${dispMonth}" />
+			<input class="button" id="deleteFeelings" type="submit" value="登録内容を削除する" />
+		</form>
 	</div>
 	
 	<div class="month"></div>
@@ -155,13 +98,9 @@ $(document).ready(function(){
 				</td>
 		</tr>
 	</table>
-
+	
 	<!-- 各種情報を受け取り -->
-	<input type="hidden" id="getUserId" th:value="${userId}" />
-	<input type="hidden" id="getYear" th:value="${dispYear}" />
-	<input type="hidden" id="getMonth" th:value="${dispMonth}" />
-	<input type="hidden" id="getDay" th:value="${day}" />
-	<input type="hidden" id="getSelectedFeelingsNum" th:value="${selectedFeelingsNum}" />
-
+	<input type="hidden" id="getSelectedFeelingsId" th:value="${selectedFeelingsId}" />
+	
 </body>
 </html>
