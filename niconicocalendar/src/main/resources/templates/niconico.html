@@ -61,6 +61,7 @@
 	 			<form method="post" action="/select">
 		 			<th:block th:each="feelingsHistory:${feelingsHistory}" th:if="${feelingsHistory.userId == user.userId and feelingsHistory.day == i}">
 		 					<th:block th:each="feelingsList:${feelingsList}" th:if="${feelingsList.feelingsNum == feelingsHistory.feelingsNum}">
+
 		  						<img class="feelingsImg" th:src="@{/img/{feelingsName}.png(feelingsName=${feelingsList.feelings})}" alt="" />
 		 					</th:block>
 		 			</th:block>

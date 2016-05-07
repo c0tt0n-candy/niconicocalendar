@@ -15,30 +15,30 @@ import com.niconicocalendar.Feelings;
 public class FeelingsManager {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-	
+
 	// 余計なの含む
 	public List<Feelings> getList(){
 		List<Feelings> feelingsList = jdbcTemplate.query("select feelingsNum, feelings from feelings_tbl", new FeelingsListRowMapper());
 		return feelingsList;
 	}
-	
+
 	// 余計なの含む いらないかも
 	public List<Feelings> getAllFeelings() {
 		List<Feelings> allFeelings = jdbcTemplate.query("select feelingsId, userId, year, month, day, feelingsNum from feelings_history_tbl", new FeelingsRowMapper());
 		return allFeelings;
 	}
-	
+
 	public List<Feelings> getAllThisPeriodFeelings(Integer year, Integer month) {
 		List<Feelings> allThisPeriodFeelings = jdbcTemplate.query("select feelingsId, userId, year, month, day, feelingsNum from feelings_history_tbl where year=? and month=?", new FeelingsRowMapper(), year, month);
-		return allThisPeriodFeelings;		
+		return allThisPeriodFeelings;
 	}
-	
+
 	// 余計なの含む いらないかも
 	public Feelings getOneFeelings(Integer feelingsId) {
 		Feelings oneFeelings = jdbcTemplate.queryForObject("select * from feelings_history_tbl where feelingsId=?", new FeelingsRowMapper(), feelingsId);
 		return oneFeelings;
 	}
-	
+
 	public Feelings findFeelings(Integer userId, Integer year, Integer month, Integer day) {
 		Feelings selectedFeelings = null;
 		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
@@ -49,25 +49,29 @@ public class FeelingsManager {
 		}
 		return selectedFeelings;
 	}
-	
+
 	public void registerFeelings(Feelings feelings) {
 		int count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl where userId=? and year=? and month=? and day=?",
 				Integer.class, feelings.getUserId(), feelings.getYear(), feelings.getMonth(), feelings.getDay());
 		if (count == 0) {
-			int maxFeelingsId = jdbcTemplate.queryForObject("select max(feelingsId) from feelings_history_tbl", Integer.class);
+			int maxFeelingsId = 0;
+			count = jdbcTemplate.queryForObject("select count(*) from feelings_history_tbl", Integer.class);
+			if(count != 0){
+				maxFeelingsId = jdbcTemplate.queryForObject("select max(feelingsId) from feelings_history_tbl", Integer.class);
+			}
 			jdbcTemplate.update("insert into feelings_history_tbl(feelingsId, userId, year, month, day, feelingsNum) VALUES (?,?,?,?,?,?)",
-					 maxFeelingsId+1, feelings.getUserId(), feelings.getYear(), feelings.getMonth(), feelings.getDay(), feelings.getFeelingsNum());
+					maxFeelingsId + 1, feelings.getUserId(), feelings.getYear(), feelings.getMonth(), feelings.getDay(), feelings.getFeelingsNum());
 		} else {
 			int feelingsId = jdbcTemplate.queryForObject("select feelingsId from feelings_history_tbl where userId=? and year=? and month=? and day=?",
 					Integer.class, feelings.getUserId(), feelings.getYear(), feelings.getMonth(), feelings.getDay());
 			jdbcTemplate.update("update feelings_history_tbl set feelingsNum=? where feelingsId=?", feelings.getFeelingsNum(), feelingsId);
 		}
 	}
-	
+
 	public void deleteFeelings(Integer feelingsId) {
 		jdbcTemplate.update("delete from feelings_history_tbl where feelingsId=?", feelingsId);
 	}
-	
+
 	private class FeelingsListRowMapper implements RowMapper<Feelings>{
 		@Override
 		public Feelings mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -76,7 +80,7 @@ public class FeelingsManager {
 			return new Feelings(feelingsNum, feelings);
 		}
 	}
-	
+
 	private class FeelingsRowMapper implements RowMapper<Feelings>{
 		@Override
 		public Feelings mapRow(ResultSet rs, int rowNum) throws SQLException {

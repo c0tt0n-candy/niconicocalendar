@@ -27,16 +27,16 @@ public class IndexController {
 	UserManager userManager;
 	@Autowired
 	FeelingsManager feelingsManager;
-	
+
 	@ModelAttribute
-	void setModels(Model model) {		
+	void setModels(Model model) {
 		List<User> users = userManager.getAllUsers();
 		List<Feelings> feelingsList = feelingsManager.getList();
 
 		model.addAttribute("users", users);
 		model.addAttribute("feelingsList", feelingsList);
 	}
-	
+
 	@RequestMapping(value = "/")
 	public String index(Model model) {
 		int dispYear = getCalendar.getDispYear();
@@ -51,7 +51,7 @@ public class IndexController {
 
 		return "niconico";
 	}
-	
+
 	@RequestMapping(value = "/register")
 	public String register(@ModelAttribute("user") User user, Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
 		int lastDay = getCalendar.getLastDay(year, month);
@@ -62,7 +62,7 @@ public class IndexController {
 
 		return "regist";
 	}
-	
+
 	@RequestMapping(value = "/register/user")
 	public String registerUser(@Validated User user, BindingResult result, Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
 		if(result.hasErrors()) {
@@ -80,7 +80,7 @@ public class IndexController {
 
 		return "redirect:/";
 	}
-	
+
 	@RequestMapping(value = "/edit/user")
 	public String editUser(@ModelAttribute("user") User user, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month) {
 		int lastDay = getCalendar.getLastDay(year, month);
@@ -127,7 +127,7 @@ public class IndexController {
 
 		return "redirect:/";
 	}
-	
+
 	@RequestMapping(value = "/select")
 	public String selectFeelings(@ModelAttribute("feelings") Feelings feelings, Model model, @RequestParam("userId") int userId, @RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day) {
 		int lastDay = getCalendar.getLastDay(year, month);
@@ -145,7 +145,7 @@ public class IndexController {
 
 		return "select";
 	}
-	
+
 	@RequestMapping(value = "/register/feelings")
 	public String registerFeelings(Feelings feelings, Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
 		feelingsManager.registerFeelings(feelings);
@@ -192,7 +192,7 @@ public class IndexController {
 
 	@RequestMapping(value = "/next")
 	public String getNext(Model model, @RequestParam("year") int year, @RequestParam("month") int month) {
-		if(month == 13){	
+		if(month == 13){
 			year += 1;
 			month = 1;
 		}
