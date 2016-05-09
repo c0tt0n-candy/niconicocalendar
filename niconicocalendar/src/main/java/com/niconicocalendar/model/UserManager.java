@@ -17,7 +17,7 @@ public class UserManager {
 	JdbcTemplate jdbcTemplate;
 
 	public List<User> getAllUsers() {
-		List<User> users= jdbcTemplate.query("select * from user_tbl", new UserRowMapper());
+		List<User> users= jdbcTemplate.query("select * from user_tbl order by userId", new UserRowMapper());
 		return users;
 	}
 
